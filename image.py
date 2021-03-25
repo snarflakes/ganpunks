@@ -83,6 +83,10 @@ button3 = digitalio.DigitalInOut(board.D16)
 button3.direction = digitalio.Direction.INPUT
 button3.pull = digitalio.Pull.UP
 
+#button4=B
+button4 = digitalio.DigitalInOut(board.D6)
+button4.direction = digitalio.Direction.INPUT
+button4.pull = digitalio.Pull.UP
 
 
 
@@ -116,10 +120,10 @@ while True:
     if not button1.value:
 #	print("Your First Gan Punk")
         response = requests.get("https://lh3.googleusercontent.com/ObAoTdEUzmtVFWdLoTOoqrjCkBpOP35n83PoIGhFXWF2Ys1DkWq4SN9kRlIUdvJ9nCHGbD3nQr2GivpoF4exNR017yycYAsf3WkW5Q=s0")
-	image_bytes = io.BytesIO(response.content)
-	img = PIL.Image.open(image_bytes)
-	resized_img = img.resize((WIDTH, HEIGHT))
-	disp.display(resized_img)
+        image_bytes = io.BytesIO(response.content)
+        img = PIL.Image.open(image_bytes)
+        resized_img = img.resize((WIDTH, HEIGHT))
+        disp.display(resized_img)
 
 
 #        index += 1
@@ -128,16 +132,12 @@ while True:
 #        print("--- " + mp3_files[index] + " ---")
 
     if not button2.value:
-	print("Your Second Gan Punk")
-	response = requests.get("https://lh3.googleusercontent.com/DYojMNXtoKs5qyMncS8iWeL5nTM100jL1o0WY-BSO6sXKIWAH9OYph-TyvhhP84lkwzR0XvjnKn_pQrMI_HxXtqs82VjmhygTr-6xZM=s0")
-	image_bytes = io.BytesIO(response.content)
-	img = PIL.Image.open(image_bytes)
-
-	resized_img = img.resize((WIDTH, HEIGHT))
-
-	disp.display(resized_img)
-
-
+        print("Your Second Gan Punk")
+        response = requests.get("https://lh3.googleusercontent.com/DYojMNXtoKs5qyMncS8iWeL5nTM100jL1o0WY-BSO6sXKIWAH9OYph-TyvhhP84lkwzR0XvjnKn_pQrMI_HxXtqs82VjmhygTr-6xZM=s0")
+        image_bytes = io.BytesIO(response.content)
+        img = PIL.Image.open(image_bytes)
+        resized_img = img.resize((WIDTH, HEIGHT))
+        disp.display(resized_img)
 
 #       subprocess.Popen(['omxplayer', '-o', 'alsa', mp3_files[index]])
 #        print('--- Playing ' + mp3_files[index] + ' ---')
@@ -145,12 +145,20 @@ while True:
 #        time.sleep(0.25)
 
     if not button3.value:
-	print("Clear Screen")
+        print("Clear Screen")
 #	clear screen to black
-	img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
-	draw = ImageDraw.Draw(img)
-	disp.display(img)
-	time.sleep(0.25)
+        img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
+        draw = ImageDraw.Draw(img)
+        disp.display(img)
+        time.sleep(0.25)
+
+    if not button4.value:
+        print("Your Third Gan Punk")
+        response = requests.get("https://lh3.googleusercontent.com/lyiX1hFcQGcSPq1Fjmd28_89Q93q-QoJdLZ2iEgyqTmuQarXlKb2E5AjiH4fLdCGxxgYN9BuwDh3wugS4jTmhp2mFcQ6ewdFkgiz6Q=s0")
+        image_bytes = io.BytesIO(response.content)
+        img = PIL.Image.open(image_bytes)
+        resized_img = img.resize((WIDTH, HEIGHT))
+        disp.display(resized_img)
 
 
 
