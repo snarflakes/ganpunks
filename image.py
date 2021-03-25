@@ -56,7 +56,7 @@ disp = ST7789.ST7789(
     port=0,
     cs=ST7789.BG_SPI_CS_FRONT,  # BG_SPI_CS_BACK or BG_SPI_CS_FRONT
     dc=9,
-    backlight=19,               # 18 for back BG slot, 19 for front BG slot.
+#    backlight=19,               # 18 for back BG slot, 19 for front BG slot.
     spi_speed_hz=80 * 1000 * 1000
 )
 
@@ -79,6 +79,36 @@ button2.pull = digitalio.Pull.UP
 button3 = digitalio.DigitalInOut(board.D16)
 button3.direction = digitalio.Direction.INPUT
 button3.pull = digitalio.Pull.UP
+
+
+
+
+
+#clear screen to black
+#img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
+#draw = ImageDraw.Draw(img)
+#disp.display(img)
+
+#punks
+
+response = requests.get("https://lh3.googleusercontent.com/ObAoTdEUzmtVFWdLoTOoqrjCkBpOP35n83PoIGhFXWF2Ys1DkWq4SN9kRlIUdvJ9nCHGbD3nQr2GivpoF4exNR017yycYAsf3WkW5Q=s0")
+image_bytes = io.BytesIO(response.content)
+img = PIL.Image.open(image_bytes)
+
+resized_img = img.resize((WIDTH, HEIGHT))
+
+disp.display(resized_img)
+
+
+
+
+
+
+
+
+
+
+
 
 mp3_files = [ f for f in listdir('.') if f[-4:] == '.mp3' ]
 
@@ -122,13 +152,13 @@ while True:
 
 #punks
 
-response = requests.get("https://lh3.googleusercontent.com/ObAoTdEUzmtVFWdLoTOoqrjCkBpOP35n83PoIGhFXWF2Ys1DkWq4SN9kRlIUdvJ9nCHGbD3nQr2GivpoF4exNR017yycYAsf3WkW5Q=s0")
-image_bytes = io.BytesIO(response.content)
-img = PIL.Image.open(image_bytes)
+#response = requests.get("https://lh3.googleusercontent.com/ObAoTdEUzmtVFWdLoTOoqrjCkBpOP35n83PoIGhFXWF2Ys1DkWq4SN9kRlIUdvJ9nCHGbD3nQr2GivpoF4exNR017yycYAsf3WkW5Q=s0")
+#image_bytes = io.BytesIO(response.content)
+#img = PIL.Image.open(image_bytes)
 
-resized_img = img.resize((WIDTH, HEIGHT))
+#resized_img = img.resize((WIDTH, HEIGHT))
 
-disp.display(resized_img)
+#disp.display(resized_img)
 
 
 
