@@ -68,14 +68,17 @@ disp.begin()
 
 #original audio code
 
+#button1=A
 button1 = digitalio.DigitalInOut(board.D5)
 button1.direction = digitalio.Direction.INPUT
 button1.pull = digitalio.Pull.UP
 
+#button2=Y
 button2 = digitalio.DigitalInOut(board.D24)
 button2.direction = digitalio.Direction.INPUT
 button2.pull = digitalio.Pull.UP
 
+#button3=X
 button3 = digitalio.DigitalInOut(board.D16)
 button3.direction = digitalio.Direction.INPUT
 button3.pull = digitalio.Pull.UP
@@ -91,64 +94,65 @@ button3.pull = digitalio.Pull.UP
 
 #punks
 
-response = requests.get("https://lh3.googleusercontent.com/ObAoTdEUzmtVFWdLoTOoqrjCkBpOP35n83PoIGhFXWF2Ys1DkWq4SN9kRlIUdvJ9nCHGbD3nQr2GivpoF4exNR017yycYAsf3WkW5Q=s0")
-image_bytes = io.BytesIO(response.content)
-img = PIL.Image.open(image_bytes)
-
-resized_img = img.resize((WIDTH, HEIGHT))
-
-disp.display(resized_img)
 
 
 
 
+#mp3_files = [ f for f in listdir('.') if f[-4:] == '.mp3' ]
 
+#if not len(mp3_files) > 0:
+#    print("No mp3 files found!")
 
+#print('--- Available mp3 files ---')
+#print(mp3_files)
+#print('--- Press button 1(A) to select mp3, button 2(Y) to play current. ---')
 
+print("""
+Pick your Gan Punk
+""")
+#index = 0
 
-
-
-
-
-mp3_files = [ f for f in listdir('.') if f[-4:] == '.mp3' ]
-
-if not len(mp3_files) > 0:
-    print("No mp3 files found!")
-
-print('--- Available mp3 files ---')
-print(mp3_files)
-print('--- Press button 1(A) to select mp3, button 2(Y) to play current. ---')
-
-index = 0
 while True:
     if not button1.value:
-        index += 1
-        if index >= len(mp3_files):
-            index = 0
-        print("--- " + mp3_files[index] + " ---")
+#	print("Your First Gan Punk")
+        response = requests.get("https://lh3.googleusercontent.com/ObAoTdEUzmtVFWdLoTOoqrjCkBpOP35n83PoIGhFXWF2Ys1DkWq4SN9kRlIUdvJ9nCHGbD3nQr2GivpoF4exNR017yycYAsf3WkW5Q=s0")
+	image_bytes = io.BytesIO(response.content)
+	img = PIL.Image.open(image_bytes)
+	resized_img = img.resize((WIDTH, HEIGHT))
+	disp.display(resized_img)
+
+
+#        index += 1
+#        if index >= len(mp3_files):
+#            index = 0
+#        print("--- " + mp3_files[index] + " ---")
 
     if not button2.value:
-        subprocess.Popen(['omxplayer', '-o', 'alsa', mp3_files[index]])
-        print('--- Playing ' + mp3_files[index] + ' ---')
-        print('--- Press button 3(X) to clear playing mp3s. ---')
-        time.sleep(0.25)
+	print("Your Second Gan Punk")
+	response = requests.get("https://lh3.googleusercontent.com/DYojMNXtoKs5qyMncS8iWeL5nTM100jL1o0WY-BSO6sXKIWAH9OYph-TyvhhP84lkwzR0XvjnKn_pQrMI_HxXtqs82VjmhygTr-6xZM=s0")
+	image_bytes = io.BytesIO(response.content)
+	img = PIL.Image.open(image_bytes)
+
+	resized_img = img.resize((WIDTH, HEIGHT))
+
+	disp.display(resized_img)
+
+
+
+#       subprocess.Popen(['omxplayer', '-o', 'alsa', mp3_files[index]])
+#        print('--- Playing ' + mp3_files[index] + ' ---')
+#        print('--- Press button 3(X) to clear playing mp3s. ---')
+#        time.sleep(0.25)
 
     if not button3.value:
-        subprocess.call(['killall', 'omxplayer'])
-        print('--- Cleared all existing mp3s. ---')
+	print("Clear Screen")
+#	clear screen to black
+	img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
+	draw = ImageDraw.Draw(img)
+	disp.display(img)
+	time.sleep(0.25)
 
-    time.sleep(0.25)
 
-    
-    
-    
-    
-    
-
-#clear screen to black
-#img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
-#draw = ImageDraw.Draw(img)
-#disp.display(img)
 
 #punks
 
