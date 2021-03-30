@@ -5,6 +5,7 @@
 [![PyPi Package](https://img.shields.io/pypi/v/st7789.svg)](https://pypi.python.org/pypi/st7789)
 [![Python Versions](https://img.shields.io/pypi/pyversions/st7789.svg)](https://pypi.python.org/pypi/st7789)
 
+GAN Punks: these instructions include the proper library to run your Pirate Audio Display and the NFT viewer/audio program to view and hear your NFTs.
 
 Python library to control an ST7789 TFT LCD display
 
@@ -14,7 +15,7 @@ Designed specifically to work with a ST7789 based 240x240 pixel TFT SPI display.
 
 # Installation
 
-Make sure you have the following dependencies:
+Make sure you have the following dependencies (modules):
 
 ````
 sudo apt-get update
@@ -27,7 +28,54 @@ Install this library by running:
 sudo pip install st7789
 ````
 
-See example of usage in the examples folder.
+Prerequisites
+(These instructions assume that your Raspberry Pi is already connected to the Internet, happily running pip and has Python3 installed)
+
+If you are running the Pi headless, connect to your Raspberry Pi using ssh.
+
+
+Install & Run
+Copy the files from this repository onto the Pi, or clone using:
+
+''''''''''''''
+cd ~
+git clone https://github.com/snarflakes/ganpunks.git
+cd ganpunks
+''''''''''''''
+
+Run the script using:
+
+''''''''''''''
+python3 image.py
+'''''''''''''''
+
+
+
+Adapt program for your own Gan Punk NFTs:
+Navigate to raspberry pi ganpunks directory
+
+'''''
+sudo nano image.py
+''''''
+
+Navigate to Buttons 1, 2, 3, 4 in the code
+Cut and paste the image links from opensea under each button
+I left button "X" as a pure back background button to avoid screen burn in.
+
+for example:
+click the image of your NFT then in new image box: 
+right click your Bastard NFT: 
+click COPY IMAGE ADDRESS 
+use that link and replace the existing opensea link for each button
+
+To include audio tracks: you need to upload them into the raspberry PI zero from a USB stick then copy and paste each audio file into the main GanPUNK directory.  
+.mp3 or .m4a should work.
+
+
+
+
+
+
 
 
 # Licensing & History
