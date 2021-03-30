@@ -73,7 +73,7 @@ right click your Bastard NFT:
 click COPY IMAGE ADDRESS 
 use that link and replace the existing opensea link for each button
 
-To include audio tracks: you need to upload them into the raspberry PI zero from a USB stick then copy and paste each audio file into the main GanPUNK directory.  
+To include audio tracks: you need to upload them into the raspberry PI zero from a USB stick (pi/media/) then copy and paste each audio file into the main GanPUNK application directory.  
 .mp3 or .m4a should work.
 
 
