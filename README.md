@@ -38,28 +38,32 @@ If you are running the Pi headless, connect to your Raspberry Pi using ssh.
 Install & Run
 Copy the files from this repository onto the Pi, or clone using:
 
-''''''''''''''
+```````````
 cd ~
 git clone https://github.com/snarflakes/ganpunks.git
 cd ganpunks
-''''''''''''''
+```````````
 
 Run the script using:
 
-''''''''''''''
+`````````````
 python3 image.py
-'''''''''''''''
+`````````````
 
 
 
 Adapt program for your own Gan Punk NFTs:
 Navigate to raspberry pi ganpunks directory
 
-'''''
+```````````
 sudo nano image.py
-''''''
+```````````
 
 Navigate to Buttons 1, 2, 3, 4 in the code
+``````````
+says this
+``````````
+
 Cut and paste the image links from opensea under each button
 I left button "X" as a pure back background button to avoid screen burn in.
 
