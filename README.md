@@ -52,26 +52,40 @@ python3 image.py
 
 
 
-Adapt program for your own Gan Punk NFTs:
+
+
+# How to Adapt program for your own Gan Punk NFTs:
+
 Navigate to raspberry pi ganpunks directory
 
 ```````````
 sudo nano image.py
 ```````````
 
-Navigate to Buttons 1, 2, 3, 4 in the code
-``````````
-says this
-``````````
+Buttons are 1=A, 2=Y, 3=X, 4=B in the code
 
-Cut and paste the image links from opensea under each button
-I left button "X" as a pure back background button to avoid screen burn in.
+Scroll down till you reach the below code in grey:
+replace https:// address with your address in code for each button1,button2,button3,button4
+I left button3 "X" as a pure back background button to avoid screen burn in.
 
-for example:
-click the image of your NFT then in new image box: 
+Precaution: use the proper web link:
+click the image of your NFT, then from new image box: 
 right click your Bastard NFT: 
 click COPY IMAGE ADDRESS 
-use that link and replace the existing opensea link for each button
+use that link and replace the existing opensea (googleusercontent.com) link below for each button
+
+``````````
+while True:
+    if not button1.value:
+        print("Your First Gan Punk")
+****    response = requests.get("https://lh3.googleusercontent.com/ObAoTdEUzmtV$....
+        image_bytes = io.BytesIO(response.content)
+        img = PIL.Image.open(image_bytes)
+        resized_img = img.resize((WIDTH, HEIGHT))
+        disp.display(resized_img)
+
+``````````
+
 
 To include audio tracks: you need to upload them into the raspberry PI zero from a USB stick (pi/media/) then copy and paste each audio file into the main GanPUNK application directory.  
 .mp3 or .m4a should work.
