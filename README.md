@@ -89,7 +89,12 @@ while True:
 
 To include audio tracks: you need to upload them into the raspberry PI zero from a USB stick (pi/media/) then copy and paste each audio file into the main GanPUNK application directory.  
 .mp3 or .m4a should work.
+delete existing .mp3 and .m4a to ensure only your mp3s get played.  you might have to change the order of your gan punks to match your desired music order.  I don't know how to re-sort audio files on the pi.  I only have music attached to button A and button Y.  Just add in the two lines of code (space bar indented) under the other buttons that don't have the below two lines if you want sounds matched to all buttons.
 
+``````
+   subprocess.Popen(['omxplayer', '-o', 'alsa', mp3_files[1]])
+   time.sleep(0.25)
+``````
 
 
 
