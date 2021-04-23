@@ -9,7 +9,7 @@
 GAN Punks: these instructions include the proper library to run your Pirate Audio Display and the NFT viewer/audio program to view and hear your NFTs.
 
 
-PARTS: screen (also available at adafruit) - https://shop.pimoroni.com/products/pirate-audio-mini-speaker
+PARTS: screen/speaker (also available at adafruit) - https://shop.pimoroni.com/products/pirate-audio-mini-speaker
 raspberrypi 0 -wh - https://www.adafruit.com/product/3708
 microSD card- https://www.amazon.com/Samsung-Endurance-32GB-Micro-Adapter/dp/B07B98GXQT
 slim battery pack (optional) - https://www.aliexpress.com/item/32954180664.html?spm=a2g0s.12269583.0.0.38da1736QdV4CH
