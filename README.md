@@ -123,6 +123,8 @@ https://www.raspberrypi.org/documentation/linux/usage/systemd.md
 
 # Licensing & History
 
+This library is modification of a modification of code originally written.  This NFT viewer reflects original code by Snarflakes.  This idea by Snarflakes is of a NFT viewer for use by an individual at their personal work station.  The idea by Snarflakes is that the device captures unique URL's reflecting either owned or non-owned NFTs is present here. The idea that via wifi an NFT viewer can display NFTs automatically updated by its underlying link. Through an individual updating/customizing these links they can modify their device displayed NFTs.
+
 This library is a modification of a modification of code originally written by Tony DiCola for Adafruit Industries, and modified to work with the ST7735 by Clement Skau.
 
 To create this ST7789 driver, it has been hard-forked from st7735-python which was originally modified by Pimoroni to include support for their 160x80 SPI LCD breakout.
