@@ -102,18 +102,19 @@ button4.pull = digitalio.Pull.UP
 
 
 
-#mp3_files = [ f for f in listdir('.') if f[-4:] == '.mp3' ]
+mp3_files = [ f for f in listdir('.') if f[-4:] == '.mp3' ] + [f for f in listdir('.') if f[-4:] == '.m4a' ]
 
-#if not len(mp3_files) > 0:
-#    print("No mp3 files found!")
+if not len(mp3_files) > 0:
+    print("No mp3 files found!")
 
-#print('--- Available mp3 files ---')
-#print(mp3_files)
+print('--- Available mp3 files ---')
+print(mp3_files)
 #print('--- Press button 1(A) to select mp3, button 2(Y) to play current. ---')
 
 print("""
 Pick your Gan Punk
 """)
+
 #index = 0
 
 while True:
@@ -125,6 +126,8 @@ while True:
         resized_img = img.resize((WIDTH, HEIGHT))
         disp.display(resized_img)
 
+        subprocess.Popen(['omxplayer', '-o', 'alsa', mp3_files[0]])
+        time.sleep(0.25)
 
 #        index += 1
 #        if index >= len(mp3_files):
@@ -139,10 +142,10 @@ while True:
         resized_img = img.resize((WIDTH, HEIGHT))
         disp.display(resized_img)
 
-#       subprocess.Popen(['omxplayer', '-o', 'alsa', mp3_files[index]])
+        subprocess.Popen(['omxplayer', '-o', 'alsa', mp3_files[1]])
 #        print('--- Playing ' + mp3_files[index] + ' ---')
 #        print('--- Press button 3(X) to clear playing mp3s. ---')
-#        time.sleep(0.25)
+        time.sleep(0.25)
 
     if not button3.value:
         print("Clear Screen")
