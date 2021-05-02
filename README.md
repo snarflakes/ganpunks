@@ -39,7 +39,7 @@ sudo apt-get install python-rpi.gpio python-spidev python-pip python-pil python-
 Install this library by running:
 
 ````
-sudo pip install st7789
+sudo pip3 install st7789
 ````
 
 Prerequisites
