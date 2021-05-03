@@ -47,6 +47,15 @@ from PIL import Image, ImageDraw, ImageFont
 import adafruit_rgb_display.st7789 as st7789
 
 
+import cv2
+
+# set up camera object
+cap = cv2.VideoCapture(-1)
+
+# QR code detection object
+detector = cv2.QRCodeDetector()
+
+
 print("""
 image.py - Display an image on the LCD.
 
@@ -126,19 +135,21 @@ button_L = DigitalInOut(board.D5)
 button_L.direction = Direction.INPUT
 button_L.pull = digitalio.Pull.UP
 
-
 button_R = DigitalInOut(board.D26)
 button_R.direction = Direction.INPUT
+button_R.pull = digitalio.Pull.UP
 
 button_U = DigitalInOut(board.D6)
 button_U.direction = Direction.INPUT
+button_U.pull = digitalio.Pull.UP
 
 button_D = DigitalInOut(board.D19)
 button_D.direction = Direction.INPUT
+button_D.pull = digitalio.Pull.UP
 
 button_C = DigitalInOut(board.D13)
 button_C.direction = Direction.INPUT
-
+button_C.pull = digitalio.Pull.UP
 
 
 #clear screen to black
@@ -161,6 +172,11 @@ print('--- Available mp3 files ---')
 print(mp3_files)
 #print('--- Press button 1(A) to select mp3, button 2(Y) to play current. ---')
 
+
+
+
+
+
 print("""
 Pick your Gan Punk
 """)
@@ -169,7 +185,7 @@ Pick your Gan Punk
 
 while True:
     if not button1.value:
-#	print("Your First Gan Punk")
+        print("Your First Gan Punk")
         response = requests.get("https://lh3.googleusercontent.com/ObAoTdEUzmtVFWdLoTOoqrjCkBpOP35n83PoIGhFXWF2Ys1DkWq4SN9kRlIUdvJ9nCHGbD3nQr2GivpoF4exNR017yycYAsf3WkW5Q=s0")
         image_bytes = io.BytesIO(response.content)
         img = PIL.Image.open(image_bytes)
@@ -213,14 +229,48 @@ while True:
         resized_img = img.resize((WIDTH, HEIGHT))
         disp.image(resized_img)
 
-
     if not button_L.value:
         print("Your fourth Gan Punk")
-        response = requests.get("https://lh3.googleusercontent.com/zpZj6rX-zlK7qTvqyDpMUdZy3HHjY1t1QpjQ6mXglYt3pZig1ACkQeA7hW8nyzwQpFA5QCDzHdd61Xy2xKZuvc_bQCfjmTFphUzc=s0") 
+        response = requests.get("https://lh3.googleusercontent.com/zpZj6rX-zlK7qTvqyDpMUdZy3HHjY1t1QpjQ6mXglYt3pZig1ACkQeA7hW8nyzwQpFA5QCDzHdd61Xy2xKZuvc_bQCfjmTFphUzc=s0")
         image_bytes = io.BytesIO(response.content)
         img = PIL.Image.open(image_bytes)
         resized_img = img.resize((WIDTH, HEIGHT))
         disp.image(resized_img)
+        time.sleep(0.25)
+
+    if not button_C.value:
+        print("Your QR Gan Punk")
+#        time.sleep(0.25)
+        while True:
+            # get the image
+            _, img = cap.read()
+            # get bounding box coords and data
+            data, bbox, _ = detector.detectAndDecode(img)
+
+            # if there is a bounding box, draw one, along with the data
+            if(bbox is not None):
+                for i in range(len(bbox)):
+                     cv2.line(img, tuple(bbox[i][0]), tuple(bbox[(i+1) % len(bbox)][0]), color=(255, 0, 255), thickness=2)
+                cv2.putText(img, data, (int(bbox[0][0][0]), int(bbox[0][0][1]) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                if data:
+                    print("data found: ", data)
+            # display the image preview
+            cv2.imshow("code detector", img)
+            if(cv2.waitKey(1) == ord("q")):
+                break
+        # free camera object and exit
+        cap.release()
+        cv2.destroyAllWindows()
+
+
+#        response = requests.get("https://lh3.googleusercontent.com/zpZj6rX-zlK7qTvqyDpMUdZy3HHjY1t1QpjQ6mXglYt3pZig1ACkQeA7hW8nyzwQpFA5QCDzHdd61Xy2xKZuvc_bQCfjmTFphUzc=s0") 
+#        image_bytes = io.BytesIO(response.content)
+#        img = PIL.Image.open(image_bytes)
+#        resized_img = img.resize((WIDTH, HEIGHT))
+#        disp.image(resized_img)
+
+
+
 
 
 #punks
