@@ -46,14 +46,17 @@ from digitalio import DigitalInOut, Direction
 from PIL import Image, ImageDraw, ImageFont
 import adafruit_rgb_display.st7789 as st7789
 
-
+#qr code modules
 import cv2
+import numpy as np
+import pyzbar.pyzbar as pyzbar
+
 
 # set up camera object
-cap = cv2.VideoCapture(-1)
+#cap = cv2.VideoCapture(-1)
 
 # QR code detection object
-detector = cv2.QRCodeDetector()
+#detector = cv2.QRCodeDetector()
 
 
 print("""
@@ -240,27 +243,69 @@ while True:
 
     if not button_C.value:
         print("Your QR Gan Punk")
-#        time.sleep(0.25)
-        while True:
-            # get the image
-            _, img = cap.read()
-            # get bounding box coords and data
-            data, bbox, _ = detector.detectAndDecode(img)
+        cap = cv2.VideoCapture(-1)
+        font = cv2.FONT_HERSHEY_PLAIN
 
-            # if there is a bounding box, draw one, along with the data
-            if(bbox is not None):
-                for i in range(len(bbox)):
-                     cv2.line(img, tuple(bbox[i][0]), tuple(bbox[(i+1) % len(bbox)][0]), color=(255, 0, 255), thickness=2)
-                cv2.putText(img, data, (int(bbox[0][0][0]), int(bbox[0][0][1]) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-                if data:
-                    print("data found: ", data)
-            # display the image preview
-            cv2.imshow("code detector", img)
-            if(cv2.waitKey(1) == ord("q")):
+        while True:
+            _, frame = cap.read()
+
+            decodedObjects = pyzbar.decode(frame)
+            for obj in decodedObjects:
+                print("Data", obj.data)
+                print(type(obj.data))
+                cv2.putText(frame, str(obj.data), (50, 50), font, 2,
+                            (255, 0, 0), 3)
+                #convertbytes object data to string
+                punknew = obj.data.decode("utf-8")
+                #if qrcode text is currently not in our csv file, write timestampe and
+                #qrcode to disk and update the set
+#                if qrcodedata not in found:
+#                    csv.write("{},{}\n".format(datetime.datetime.now(), qrcodedata))
+#                    csv.flush()
+#                    found.add(qrcodedata)
+            if not button_R.value:
+                print("Saved your punk")
                 break
-        # free camera object and exit
+#                    qrcodedata = obj.data
+#                    punknew = qrcodedata.decode("utf-8")
+
+                    #punknew = qrcodedata
+                    #free camera object and exit
         cap.release()
         cv2.destroyAllWindows()
+        print(punknew)
+
+    if not button_D.value:
+        print("Your Saved Gan Punk")
+        response = requests.get(punknew)
+        image_bytes = io.BytesIO(response.content)
+        img = PIL.Image.open(image_bytes)
+        resized_img = img.resize((WIDTH, HEIGHT))
+        disp.image(resized_img)
+        time.sleep(0.25)
+
+
+#        time.sleep(0.25)
+#        while True:
+            # get the image
+#            _, img = cap.read()
+            # get bounding box coords and data
+#            data, bbox, _ = detector.detectAndDecode(img)
+
+            # if there is a bounding box, draw one, along with the data
+#            if(bbox is not None):
+#                for i in range(len(bbox)):
+#                     cv2.line(img, tuple(bbox[i][0]), tuple(bbox[(i+1) % len(bbox)][0]), color=(255, 0, 255), thickness=2)
+#                cv2.putText(img, data, (int(bbox[0][0][0]), int(bbox[0][0][1]) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+#                if data:
+#                    print("data found: ", data)
+            # display the image preview
+#            cv2.imshow("code detector", img)
+#            if(cv2.waitKey(1) == ord("q")):
+#                break
+        # free camera object and exit
+#        cap.release()
+#        cv2.destroyAllWindows()
 
 
 #        response = requests.get("https://lh3.googleusercontent.com/zpZj6rX-zlK7qTvqyDpMUdZy3HHjY1t1QpjQ6mXglYt3pZig1ACkQeA7hW8nyzwQpFA5QCDzHdd61Xy2xKZuvc_bQCfjmTFphUzc=s0") 
