@@ -1,23 +1,4 @@
-# Copyright (c) 2014 Adafruit Industries
-# Author: Tony DiCola
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
+import os
 import sys
 import logging
 import requests
@@ -50,6 +31,12 @@ import adafruit_rgb_display.st7789 as st7789
 import cv2
 import numpy as np
 import pyzbar.pyzbar as pyzbar
+
+#def Shutdown(channel):
+#    print("Shutting Down")
+#    time.sleep(5)
+#    os.system("sudo shutdown -h now")
+
 
 
 # set up camera object
@@ -188,15 +175,20 @@ Pick your Gan Punk
 
 while True:
     if not button1.value:
-        print("Your First Gan Punk")
-        response = requests.get("https://lh3.googleusercontent.com/ObAoTdEUzmtVFWdLoTOoqrjCkBpOP35n83PoIGhFXWF2Ys1DkWq4SN9kRlIUdvJ9nCHGbD3nQr2GivpoF4exNR017yycYAsf3WkW5Q=s0")
-        image_bytes = io.BytesIO(response.content)
-        img = PIL.Image.open(image_bytes)
-        resized_img = img.resize((WIDTH, HEIGHT))
-        disp.image(resized_img)
+        print("Shutting Down")
+        time.sleep(5)
+        os.system("sudo shutdown -h now")
+        while 1:
+            time.sleep(1)
+#        print("Your First Gan Punk")
+#        response = requests.get("https://lh3.googleusercontent.com/ObAoTdEUzmtVFWdLoTOoqrjCkBpOP35n83PoIGhFXWF2Ys1DkWq4SN9kRlIUdvJ9nCHGbD3nQr2GivpoF4exNR017yycYAsf3WkW5Q=s0")
+#        image_bytes = io.BytesIO(response.content)
+#        img = PIL.Image.open(image_bytes)
+#        resized_img = img.resize((WIDTH, HEIGHT))
+#        disp.image(resized_img)
 
 #        subprocess.Popen(['omxplayer', '-o', 'alsa', mp3_files[0]])
-        time.sleep(0.25)
+#        time.sleep(0.25)
 
 #        index += 1
 #        if index >= len(mp3_files):
