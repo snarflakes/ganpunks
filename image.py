@@ -31,11 +31,19 @@ import adafruit_rgb_display.st7789 as st7789
 import cv2
 import numpy as np
 import pyzbar.pyzbar as pyzbar
+import argparse
+import datetime
+import imutils
 
-#def Shutdown(channel):
-#    print("Shutting Down")
-#    time.sleep(5)
-#    os.system("sudo shutdown -h now")
+#construct the argument parser and parse the arguments
+ap = argparse.ArgumentParser()
+ap.add_argument("-o", "--output", type=str, default="qrcodes.csv", help="path to output CSV file containing qrcode data")
+args = vars(ap.parse_args())
+
+
+#open the output CSV file for writing and initialize the set of qrcodes found thus far
+csv = open(args["output"], "a")
+found = set()
 
 
 
@@ -173,6 +181,7 @@ Pick your Gan Punk
 
 #index = 0
 
+
 while True:
     if not button1.value:
         print("Shutting Down")
@@ -248,13 +257,13 @@ while True:
                 cv2.putText(frame, str(obj.data), (50, 50), font, 2,
                             (255, 0, 0), 3)
                 #convertbytes object data to string
-                punknew = obj.data.decode("utf-8")
+                qrcodeData = obj.data.decode("utf-8")
                 #if qrcode text is currently not in our csv file, write timestampe and
                 #qrcode to disk and update the set
-#                if qrcodedata not in found:
-#                    csv.write("{},{}\n".format(datetime.datetime.now(), qrcodedata))
-#                    csv.flush()
-#                    found.add(qrcodedata)
+                if qrcodeData not in found:
+                    csv.write("{},{}\n".format(datetime.datetime.now(), qrcodeData))
+                    csv.flush()
+                    found.add(qrcodeData)
             if not button_R.value:
                 print("Saved your punk")
                 break
@@ -265,11 +274,13 @@ while True:
                     #free camera object and exit
         cap.release()
         cv2.destroyAllWindows()
-        print(punknew)
+        print(qrcodeData)
 
     if not button_D.value:
-        print("Your Saved Gan Punk")
-        response = requests.get(punknew)
+        print("Your Saved Gan Punks")
+#        for value in qrcodeData[1]:
+        
+        response = requests.get(qrcodeData)
         image_bytes = io.BytesIO(response.content)
         img = PIL.Image.open(image_bytes)
         resized_img = img.resize((WIDTH, HEIGHT))
