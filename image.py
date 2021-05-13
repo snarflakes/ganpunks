@@ -45,7 +45,7 @@ args = vars(ap.parse_args())
 csv = open(args["output"], "a")
 found = set()
 
-
+x = 1
 
 # set up camera object
 #cap = cv2.VideoCapture(-1)
@@ -278,14 +278,39 @@ while True:
 
     if not button_D.value:
         print("Your Saved Gan Punks")
+        opened_file = open('qrcodes.csv')
+        from csv import reader
+        read_file = reader(opened_file)
+        apps_data = list(read_file)
+        nftlinks = []
+        onelink = apps_data[x][1]
+        x += 1
+#        for value in apps_data  
+#        for value in apps_data:
+#            onelink = value[1]
+#            print(onelink)
+
+
 #        for value in qrcodeData[1]:
         
-        response = requests.get(qrcodeData)
+        response = requests.get(onelink)
         image_bytes = io.BytesIO(response.content)
         img = PIL.Image.open(image_bytes)
         resized_img = img.resize((WIDTH, HEIGHT))
         disp.image(resized_img)
+#        onelink = apps_data[3+1]
         time.sleep(0.25)
+       
+#        if not button_D.value:
+#            for value in apps_data:
+#                onelink = value[3]
+#                response = requests.get(onelink)
+#                image_bytes = io.BytesIO(response.content)
+#                img = PIL.Image.open(image_bytes)
+#                resized_img = img.resize((WIDTH, HEIGHT))
+#                disp.image(resized_img)
+#                time.sleep(0.25)
+
 
 
 #        time.sleep(0.25)
