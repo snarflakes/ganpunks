@@ -1,3 +1,4 @@
+import csv
 import os
 import sys
 import logging
@@ -34,6 +35,7 @@ import pyzbar.pyzbar as pyzbar
 import argparse
 import datetime
 import imutils
+from csv import reader
 
 #construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -45,7 +47,7 @@ args = vars(ap.parse_args())
 csv = open(args["output"], "a")
 found = set()
 
-x = 1
+x = 0
 
 # set up camera object
 #cap = cv2.VideoCapture(-1)
@@ -108,12 +110,12 @@ HEIGHT = disp.height
 
 #original audio code
 
-#button1=A
+#button1=A=key1
 button1 = digitalio.DigitalInOut(board.D21)
 button1.direction = digitalio.Direction.INPUT
 button1.pull = digitalio.Pull.UP
 
-#button2=Y
+#button2=Y=key2
 button2 = digitalio.DigitalInOut(board.D20)
 button2.direction = digitalio.Direction.INPUT
 button2.pull = digitalio.Pull.UP
@@ -123,7 +125,7 @@ button2.pull = digitalio.Pull.UP
 #button3.direction = digitalio.Direction.INPUT
 #button3.pull = digitalio.Pull.UP
 
-#button4=B
+#button4=B=key3
 button4 = digitalio.DigitalInOut(board.D16)
 button4.direction = digitalio.Direction.INPUT
 button4.pull = digitalio.Pull.UP
@@ -205,12 +207,46 @@ while True:
 #        print("--- " + mp3_files[index] + " ---")
 
     if not button2.value:
-        print("Your Second Gan Punk")
-        response = requests.get("https://lh3.googleusercontent.com/DYojMNXtoKs5qyMncS8iWeL5nTM100jL1o0WY-BSO6sXKIWAH9OYph-TyvhhP84lkwzR0XvjnKn_pQrMI_HxXtqs82VjmhygTr-6xZM=s0")
-        image_bytes = io.BytesIO(response.content)
-        img = PIL.Image.open(image_bytes)
-        resized_img = img.resize((WIDTH, HEIGHT))
-        disp.image(resized_img)
+        print("Delete Your NFT")
+#        removenft = x - 1 
+#        lines = list() 
+#        with open('qrcodes.csv', 'r') as readFile:
+#            reader = csv.reader(readFile)
+#        print(apps_data[removenft])
+
+#        with open('qrcodes.csv', 'rb') as inp, open('qrcodes.csv', 'wb') as out:
+#            writer = csv.writer(out)
+#            for row in csv.reader(inp):
+#                if not row[removenft]:
+#                    writer.writerow(row)
+#                    x = 0
+
+#        for row in apps_data:
+#            lines.append(row)
+#        lines.remove(apps_data[removenft])
+#        print(lines)
+#        with open('qrcodes.csv', 'w') as writeFile:
+#            writer = csv.writer(writeFile, delimiter=',')
+#            writer.writerows(lines)
+
+#        with open('qrcodes.csv', 'r') as csv_file:
+#            csv_reader = csv.reader(csv_file)
+#            csv_reader.remove(removenft)
+           
+#            with open('qrcodes.csv', 'w') as new_file:
+#                csv_writer = csv.writer(new_file)
+
+#                for line in csv_reader:
+#                    csv_writer.writerow(line)
+
+
+
+
+#        response = requests.get("https://lh3.googleusercontent.com/DYojMNXtoKs5qyMncS8iWeL5nTM100jL1o0WY-BSO6sXKIWAH9OYph-TyvhhP84lkwzR0XvjnKn_pQrMI_HxXtqs82VjmhygTr-6xZM=s0")
+#        image_bytes = io.BytesIO(response.content)
+#        img = PIL.Image.open(image_bytes)
+#        resized_img = img.resize((WIDTH, HEIGHT))
+#        disp.image(resized_img)
 
 #        subprocess.Popen(['omxplayer', '-o', 'alsa', mp3_files[1]])
 #        print('--- Playing ' + mp3_files[index] + ' ---')
@@ -265,6 +301,11 @@ while True:
                     csv.flush()
                     found.add(qrcodeData)
             if not button_R.value:
+#set carousel at newest added nft
+                opened_file = open('qrcodes.csv')
+                read_file = reader(opened_file)
+                apps_data = list(read_file)
+                x = (len(apps_data) - 1)
                 print("Saved your punk")
                 break
 #                    qrcodedata = obj.data
@@ -279,37 +320,56 @@ while True:
     if not button_D.value:
         print("Your Saved Gan Punks")
         opened_file = open('qrcodes.csv')
-        from csv import reader
         read_file = reader(opened_file)
         apps_data = list(read_file)
-        nftlinks = []
         onelink = apps_data[x][1]
         x += 1
-#        for value in apps_data  
-#        for value in apps_data:
-#            onelink = value[1]
-#            print(onelink)
+        print(len(apps_data))
+        if x > (len(apps_data) - 1):
+            x = 0
 
-
-#        for value in qrcodeData[1]:
-        
+#display next NFT in order of CSV
         response = requests.get(onelink)
         image_bytes = io.BytesIO(response.content)
         img = PIL.Image.open(image_bytes)
         resized_img = img.resize((WIDTH, HEIGHT))
         disp.image(resized_img)
-#        onelink = apps_data[3+1]
         time.sleep(0.25)
-       
-#        if not button_D.value:
-#            for value in apps_data:
-#                onelink = value[3]
-#                response = requests.get(onelink)
-#                image_bytes = io.BytesIO(response.content)
-#                img = PIL.Image.open(image_bytes)
-#                resized_img = img.resize((WIDTH, HEIGHT))
-#                disp.image(resized_img)
-#                time.sleep(0.25)
+
+
+    if not button_U.value:
+#reverse direction scrolling
+        print("Your Saved Gan Punks")
+        opened_file = open('qrcodes.csv')
+        from csv import reader
+        read_file = reader(opened_file)
+        apps_data = list(read_file)
+        nftlinks = []
+        onelink = apps_data[x][1]
+        x -= 1
+        print(len(apps_data))
+        if x < 0:
+            x = (len(apps_data) - 1)
+
+#display next NFT in reverse order of CSV
+        response = requests.get(onelink)
+        image_bytes = io.BytesIO(response.content)
+        img = PIL.Image.open(image_bytes)
+        resized_img = img.resize((WIDTH, HEIGHT))
+        disp.image(resized_img)
+        time.sleep(0.25)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -336,59 +396,7 @@ while True:
 #        cv2.destroyAllWindows()
 
 
-#        response = requests.get("https://lh3.googleusercontent.com/zpZj6rX-zlK7qTvqyDpMUdZy3HHjY1t1QpjQ6mXglYt3pZig1ACkQeA7hW8nyzwQpFA5QCDzHdd61Xy2xKZuvc_bQCfjmTFphUzc=s0") 
-#        image_bytes = io.BytesIO(response.content)
-#        img = PIL.Image.open(image_bytes)
-#        resized_img = img.resize((WIDTH, HEIGHT))
-#        disp.image(resized_img)
 
 
 
 
-
-#punks
-
-#response = requests.get("https://lh3.googleusercontent.com/ObAoTdEUzmtVFWdLoTOoqrjCkBpOP35n83PoIGhFXWF2Ys1DkWq4SN9kRlIUdvJ9nCHGbD3nQr2GivpoF4exNR017yycYAsf3WkW5Q=s0")
-#image_bytes = io.BytesIO(response.content)
-#img = PIL.Image.open(image_bytes)
-
-#resized_img = img.resize((WIDTH, HEIGHT))
-
-#disp.display(resized_img)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Initialize display.
-#disp.begin()
-
-# Load an image.
-#print('Loading image: {}...'.format(img))
-#img = Image.open(img)
-
-# Resize the image
-#img = Image.resize((WIDTH, HEIGHT))
-
-# Draw the image on the display hardware.
-print('Drawing image')
-
-#disp.display(img)
