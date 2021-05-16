@@ -290,10 +290,29 @@ while True:
             for obj in decodedObjects:
                 print("Data", obj.data)
                 print(type(obj.data))
+#Display on screen confirmation of reading
                 cv2.putText(frame, str(obj.data), (50, 50), font, 2,
                             (255, 0, 0), 3)
                 #convertbytes object data to string
                 qrcodeData = obj.data.decode("utf-8")
+#Flash NFT?
+                response = requests.get(qrcodeData)
+                image_bytes = io.BytesIO(response.content)
+                img = PIL.Image.open(image_bytes)
+                resized_img = img.resize((WIDTH, HEIGHT))
+                disp.image(resized_img)
+                time.sleep(0.50)
+#Go black
+                print("QRCode scanned to Display Screen")
+#	clear screen to black ********Add Saved in Ascii?
+#                disp.begin()
+                img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
+                draw = ImageDraw.Draw(img)
+                disp.image(img)
+                time.sleep(0.25)
+## Add except if trying to scan  marketplace, not pure image data 
+
+
                 #if qrcode text is currently not in our csv file, write timestampe and
                 #qrcode to disk and update the set
                 if qrcodeData not in found:
