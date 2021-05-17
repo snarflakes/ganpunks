@@ -106,7 +106,17 @@ WIDTH = disp.width
 HEIGHT = disp.height
 
 
-#disp.begin()
+#splash screen
+image = Image.open('nftydaze3.jpg')
+image = image.resize((WIDTH, HEIGHT))
+# Draw the image on the display hardware.
+print('Drawing image')
+disp.image(image)
+time.sleep(1)
+
+#### Add default most recently added NFT as base NFT displayed (can increase splash screen time)
+
+
 
 #original audio code
 
@@ -163,6 +173,8 @@ button_C.pull = digitalio.Pull.UP
 
 
 
+
+
 mp3_files = [ f for f in listdir('.') if f[-4:] == '.mp3' ] + [f for f in listdir('.') if f[-4:] == '.m4a' ]
 
 if not len(mp3_files) > 0:
@@ -187,6 +199,13 @@ Pick your Gan Punk
 while True:
     if not button1.value:
         print("Shutting Down")
+
+#Shutdown display screen Splash
+        image = Image.open('nftydaze3.jpg')
+        image = image.resize((WIDTH, HEIGHT))
+        print('Drawing image')
+        disp.image(image)
+
         time.sleep(5)
         os.system("sudo shutdown -h now")
         while 1:
@@ -280,6 +299,13 @@ while True:
 
     if not button_C.value:
         print("Your QR Gan Punk")
+#Aim at QR codes; new NFT will flash when captured:  display screen Splash
+        image = Image.open('nftydaze3.jpg')
+        image = image.resize((WIDTH, HEIGHT))
+        print('Drawing image')
+        disp.image(image)
+        time.sleep(1)
+
         cap = cv2.VideoCapture(-1)
         font = cv2.FONT_HERSHEY_PLAIN
 
@@ -295,7 +321,7 @@ while True:
                             (255, 0, 0), 3)
                 #convertbytes object data to string
                 qrcodeData = obj.data.decode("utf-8")
-#Flash NFT?
+#Flash NFT to signal capture
                 response = requests.get(qrcodeData)
                 image_bytes = io.BytesIO(response.content)
                 img = PIL.Image.open(image_bytes)
@@ -304,14 +330,14 @@ while True:
                 time.sleep(0.50)
 #Go black
                 print("QRCode scanned to Display Screen")
-#	clear screen to black ********Add Saved in Ascii?
+#	clear screen to black ********Add Saved in Ascii? "press joystick down to stop scanning QRcodes?"
 #                disp.begin()
                 img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
                 draw = ImageDraw.Draw(img)
                 disp.image(img)
                 time.sleep(0.25)
 ## Add except if trying to scan  marketplace, not pure image data 
-
+## Add except if no qrcode was scanned
 
                 #if qrcode text is currently not in our csv file, write timestampe and
                 #qrcode to disk and update the set
@@ -320,6 +346,8 @@ while True:
                     csv.flush()
                     found.add(qrcodeData)
             if not button_R.value:
+
+#To do: Splash: ALL Stored:  Resume Selecting Your NFT to display
 #set carousel at newest added nft
                 opened_file = open('qrcodes.csv')
                 read_file = reader(opened_file)
