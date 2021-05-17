@@ -1,3 +1,6 @@
+#All Code Copyrighted and patent pending to Snarflakes. 
+#No unauthorized use of code allowed
+
 import csv
 import os
 import sys
@@ -300,11 +303,27 @@ while True:
     if not button_C.value:
         print("Your QR Gan Punk")
 #Aim at QR codes; new NFT will flash when captured:  display screen Splash
-        image = Image.open('nftydaze3.jpg')
-        image = image.resize((WIDTH, HEIGHT))
-        print('Drawing image')
-        disp.image(image)
-        time.sleep(1)
+
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+        im = Image.new("RGB", (240, 240), "blue")
+        d = ImageDraw.Draw(im)
+        d.line(((0, 120), (200, 120)), "gray")
+        d.line(((120, 0), (120, 200)), "gray")
+
+        d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
+        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+        d.text((120, 120), "Aim 12 inches away", fill="black", anchor="ms", font=font)
+        d.text((120, 140), "from QR Codes", fill="black", anchor="ms", font=font)
+        d.text((120, 160), "New NFT will flash", fill="black", anchor="ms", font=font)
+        d.text((120, 180), "when captured. Repeat.", fill="black", anchor="ms", font=font)
+        d.text((120, 200), "Press Down when done!", fill="black", anchor="ms", font=font)
+        d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+
+#        im = im.rotate()
+        disp.image(im)
+
+
+#Start QRcode capture
 
         cap = cv2.VideoCapture(-1)
         font = cv2.FONT_HERSHEY_PLAIN
@@ -348,6 +367,23 @@ while True:
             if not button_R.value:
 
 #To do: Splash: ALL Stored:  Resume Selecting Your NFT to display
+                font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+                im = Image.new("RGB", (240, 240), "blue")
+                d = ImageDraw.Draw(im)
+                d.line(((0, 120), (200, 120)), "gray")
+                d.line(((120, 0), (120, 200)), "gray")
+
+                d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
+                d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+                d.text((120, 120), "All QRCodes Stored!", fill="black", anchor="ms", font=font)
+                d.text((120, 140), "Press Left or", fill="black", anchor="ms", font=font)
+                d.text((120, 160), "Right to select", fill="black", anchor="ms", font=font)
+                d.text((120, 180), "your preferred NFT", fill="black", anchor="ms", font=font)
+                d.text((120, 200), "to be displayed", fill="black", anchor="ms", font=font)
+                d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+#    im = im.rotate(180)
+                disp.image(im)
+
 #set carousel at newest added nft
                 opened_file = open('qrcodes.csv')
                 read_file = reader(opened_file)
