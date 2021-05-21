@@ -47,7 +47,7 @@ args = vars(ap.parse_args())
 
 
 #open the output CSV file for writing and initialize the set of qrcodes found thus far
-csv = open(args["output"], "a")
+csv2 = open(args["output"], "a")
 found = set()
 
 x = 0
@@ -113,11 +113,56 @@ HEIGHT = disp.height
 image = Image.open('nftydaze3.jpg')
 image = image.resize((WIDTH, HEIGHT))
 # Draw the image on the display hardware.
-print('Drawing image')
+print('Drawing Splash image')
 disp.image(image)
-time.sleep(1)
+time.sleep(3)
 
 #### Add default most recently added NFT as base NFT displayed (can increase splash screen time)
+
+opened_file = open('qrcodes.csv')
+read_file = reader(opened_file)
+apps_data = list(read_file)
+x = (len(apps_data) - 1)
+onelink = apps_data[x][1]
+
+try:
+    response = requests.get(onelink)
+
+except HTTPError as e:
+    print("can't connect to internet:HTTPError")
+   #inform them of the specific error here (based off the error code)
+except URLError as e:
+    print("can't connect to internet:URLError")
+
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+    im = Image.new("RGB", (240, 240), "blue")
+    d = ImageDraw.Draw(im)
+    d.line(((0, 120), (200, 120)), "gray")
+    d.line(((120, 0), (120, 200)), "gray")
+
+    d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
+    d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+    d.text((120, 120), "No internet connected", fill="black", anchor="ms", font=font)
+    d.text((120, 140), "to fetch NFT images", fill="black", anchor="ms", font=font)
+    d.text((120, 160), "Connect your phone", fill="black", anchor="ms", font=font)
+    d.text((120, 180), "wifi to 'HomeBridge'", fill="black", anchor="ms", font=font)
+    d.text((120, 200), "Iphone to Iphone Hotspots", fill="black", anchor="ms", font=font)
+    d.text((120, 220), "don't work_______", fill="black", anchor="ms", font=font)
+
+#       im = im.rotate()
+    disp.image(im)
+
+   #inform them of the specific error here
+except Exception as e:
+    print("can't connect to internet:Exception")
+   #inform them that a general error has occurred 
+
+
+image_bytes = io.BytesIO(response.content)
+img = PIL.Image.open(image_bytes)
+resized_img = img.resize((WIDTH, HEIGHT))
+disp.image(resized_img)
+time.sleep(0.25)
 
 
 
@@ -165,32 +210,6 @@ button_C.direction = Direction.INPUT
 button_C.pull = digitalio.Pull.UP
 
 
-#clear screen to black
-#img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
-#draw = ImageDraw.Draw(img)
-#disp.display(img)
-
-#punks
-
-
-
-
-
-
-
-mp3_files = [ f for f in listdir('.') if f[-4:] == '.mp3' ] + [f for f in listdir('.') if f[-4:] == '.m4a' ]
-
-if not len(mp3_files) > 0:
-    print("No mp3 files found!")
-
-print('--- Available mp3 files ---')
-print(mp3_files)
-#print('--- Press button 1(A) to select mp3, button 2(Y) to play current. ---')
-
-
-
-
-
 
 print("""
 Pick your Gan Punk
@@ -213,12 +232,6 @@ while True:
         os.system("sudo shutdown -h now")
         while 1:
             time.sleep(1)
-#        print("Your First Gan Punk")
-#        response = requests.get("https://lh3.googleusercontent.com/ObAoTdEUzmtVFWdLoTOoqrjCkBpOP35n83PoIGhFXWF2Ys1DkWq4SN9kRlIUdvJ9nCHGbD3nQr2GivpoF4exNR017yycYAsf3WkW5Q=s0")
-#        image_bytes = io.BytesIO(response.content)
-#        img = PIL.Image.open(image_bytes)
-#        resized_img = img.resize((WIDTH, HEIGHT))
-#        disp.image(resized_img)
 
 #        subprocess.Popen(['omxplayer', '-o', 'alsa', mp3_files[0]])
 #        time.sleep(0.25)
@@ -230,66 +243,101 @@ while True:
 
     if not button2.value:
         print("Delete Your NFT")
-#        removenft = x - 1 
-#        lines = list() 
-#        with open('qrcodes.csv', 'r') as readFile:
-#            reader = csv.reader(readFile)
-#        print(apps_data[removenft])
+        removenft = x + 1
 
-#        with open('qrcodes.csv', 'rb') as inp, open('qrcodes.csv', 'wb') as out:
-#            writer = csv.writer(out)
-#            for row in csv.reader(inp):
-#                if not row[removenft]:
-#                    writer.writerow(row)
-#                    x = 0
+#        lines = list()
 
-#        for row in apps_data:
-#            lines.append(row)
-#        lines.remove(apps_data[removenft])
-#        print(lines)
-#        with open('qrcodes.csv', 'w') as writeFile:
-#            writer = csv.writer(writeFile, delimiter=',')
-#            writer.writerows(lines)
+        updatedlist=[]
+#CSV starts as object, list? turns it into a string
+        with open("qrcodes.csv",newline="") as f:
+            print(type(f))
+            read_file = reader(f)
+            mylist = list(read_file)
+            onelink = mylist[removenft][1]
 
-#        with open('qrcodes.csv', 'r') as csv_file:
-#            csv_reader = csv.reader(csv_file)
-#            csv_reader.remove(removenft)
+#            print(type(mylist))
+#            print(type(mylist[0][0]))
+#            print(type(mylist[0][1]))
+#            reader=csv.reader(f)
+#            print(mylist)
+            for row in mylist: #for every row in the file
+                print(row)
+                print(row[1])
+                print(onelink)
+#                print(type(row[1]))
+#                print(row[1])
+                if row[1]!=onelink: #as long as the username is not in the row .......
+                    updatedlist.append(row) #add each row, line by line, into a list called 'udpatedlist'
+            print(updatedlist)
+            print(updatedlist[0][1])
+            print(type(updatedlist[0][1]))
+            print(updatedlist[0][0])
+            print(type(updatedlist[0][0]))
+        with open("qrcodes.csv","w",newline="") as f:
+            mywriter=csv.writer(f)
            
-#            with open('qrcodes.csv', 'w') as new_file:
-#                csv_writer = csv.writer(new_file)
+            for value in updatedlist:
+                mywriter.writerow(value)
+# Write.writerows([updatedlist])
+            print("File has been updated")
+            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 30)
+            im = Image.new("RGB", (240, 240), "red")
+            d = ImageDraw.Draw(im)
+            d.line(((0, 120), (200, 120)), "gray")
+            d.line(((120, 0), (120, 200)), "gray")
 
-#                for line in csv_reader:
-#                    csv_writer.writerow(line)
+            d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+            d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+            d.text((120, 120), "Deleted NFT", fill="black", anchor="ms", font=font)
+            d.text((120, 140), "They are gone", fill="black", anchor="ms", font=font)
+            d.text((120, 160), "Not forever", fill="black", anchor="ms", font=font)
+            d.text((120, 180), "Just", fill="black", anchor="ms", font=font)
+            d.text((120, 200), "Reload", fill="black", anchor="ms", font=font)
+            d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+
+#        im = im.rotate()
+            disp.image(im)
 
 
 
 
-#        response = requests.get("https://lh3.googleusercontent.com/DYojMNXtoKs5qyMncS8iWeL5nTM100jL1o0WY-BSO6sXKIWAH9OYph-TyvhhP84lkwzR0XvjnKn_pQrMI_HxXtqs82VjmhygTr-6xZM=s0")
-#        image_bytes = io.BytesIO(response.content)
-#        img = PIL.Image.open(image_bytes)
-#        resized_img = img.resize((WIDTH, HEIGHT))
-#        disp.image(resized_img)
 
 #        subprocess.Popen(['omxplayer', '-o', 'alsa', mp3_files[1]])
 #        print('--- Playing ' + mp3_files[index] + ' ---')
 #        print('--- Press button 3(X) to clear playing mp3s. ---')
         time.sleep(0.25)
 
-#    if not button3.value:
-#        print("Clear Screen")
-#	clear screen to black
-#        img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
-#        draw = ImageDraw.Draw(img)
-#        disp.display(img)
-#        time.sleep(0.25)
-
     if not button4.value:
-        print("Your Third Gan Punk")
-        response = requests.get("https://lh3.googleusercontent.com/lyiX1hFcQGcSPq1Fjmd28_89Q93q-QoJdLZ2iEgyqTmuQarXlKb2E5AjiH4fLdCGxxgYN9BuwDh3wugS4jTmhp2mFcQ6ewdFkgiz6Q=s0")
-        image_bytes = io.BytesIO(response.content)
-        img = PIL.Image.open(image_bytes)
-        resized_img = img.resize((WIDTH, HEIGHT))
-        disp.image(resized_img)
+#SlideShow Mode
+        print("SlideShow Mode")
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 30)
+        im = Image.new("RGB", (240, 240), "pink")
+        d = ImageDraw.Draw(im)
+        d.line(((0, 120), (200, 120)), "gray")
+        d.line(((120, 0), (120, 200)), "gray")
+
+        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+#        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+        d.text((120, 120), "SlideShow", fill="black", anchor="ms", font=font)
+        d.text((120, 140), "Mode", fill="black", anchor="ms", font=font)
+        d.text((120, 160), "Activated", fill="black", anchor="ms", font=font)
+#        d.text((120, 180), "when captured. Repeat.", fill="black", anchor="ms", font=font)
+#        d.text((120, 200), "Press Down when done!", fill="black", anchor="ms", font=font)
+#        d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+
+#        im = im.rotate()
+        disp.image(im)
+
+        for value in apps_data:
+             print(value[1])
+             onelink = value[1]
+             response = requests.get(onelink)
+             image_bytes = io.BytesIO(response.content)
+             img = PIL.Image.open(image_bytes)
+             resized_img = img.resize((WIDTH, HEIGHT))
+             disp.image(resized_img)
+             time.sleep(5)
+             #how to stop loop? if any other button is pressed?
 
     if not button_L.value:
         print("Your fourth Gan Punk")
@@ -361,14 +409,14 @@ while True:
                 #if qrcode text is currently not in our csv file, write timestampe and
                 #qrcode to disk and update the set
                 if qrcodeData not in found:
-                    csv.write("{},{}\n".format(datetime.datetime.now(), qrcodeData))
-                    csv.flush()
+                    csv2.write("{},{}\n".format(datetime.datetime.now(), qrcodeData))
+                    csv2.flush()
                     found.add(qrcodeData)
             if not button_R.value:
 
 #To do: Splash: ALL Stored:  Resume Selecting Your NFT to display
                 font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-                im = Image.new("RGB", (240, 240), "blue")
+                im = Image.new("RGB", (240, 240), "yellow")
                 d = ImageDraw.Draw(im)
                 d.line(((0, 120), (200, 120)), "gray")
                 d.line(((120, 0), (120, 200)), "gray")
@@ -422,7 +470,7 @@ while True:
 
     if not button_U.value:
 #reverse direction scrolling
-        print("Your Saved Gan Punks")
+        print("Your Saved Gan Punks:reverse direction")
         opened_file = open('qrcodes.csv')
         from csv import reader
         read_file = reader(opened_file)
