@@ -90,6 +90,7 @@ image.py - Display an image on the LCD.
 
 """)
 
+
 # Create the joystick display
 cs_pin = DigitalInOut(board.CE0)
 dc_pin = DigitalInOut(board.D25)
@@ -124,9 +125,9 @@ image = image.resize((WIDTH, HEIGHT))
 # Draw the image on the display hardware.
 print('Drawing Splash image')
 disp.image(image)
-time.sleep(6)
+time.sleep(4)
 
-# Added default most recently added NFT as base NFT displayed (can increase splash screen time)
+#### Adds default most recently added NFT as base NFT displayed (can increase splash screen time)
 
 opened_file = open('qrcodes.csv')
 read_file = reader(opened_file)
@@ -134,12 +135,15 @@ apps_data = list(read_file)
 x = (len(apps_data) - 1)
 onelink = apps_data[x][1]
 
-#check internet connection
+#test web connection
 try:
     response = requests.get(onelink)
 
-except Exception:
-    print("can't connect to internet:socket gaierror")
+except HTTPError as e:
+    print("can't connect to internet:HTTPError")
+   #inform them of the specific error here (based off the error code)
+except URLError as e:
+    print("can't connect to internet:URLError")
 
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
     im = Image.new("RGB", (240, 240), "blue")
@@ -154,55 +158,14 @@ except Exception:
     d.text((120, 160), "Connect your phone", fill="black", anchor="ms", font=font)
     d.text((120, 180), "wifi to 'HomeBridge'", fill="black", anchor="ms", font=font)
     d.text((120, 200), "Iphone to Iphone Hotspots", fill="black", anchor="ms", font=font)
-    d.text((120, 220), "don't work:shutting down in 2mins", fill="black", anchor="ms", font=font)
+    d.text((120, 220), "don't work_______", fill="black", anchor="ms", font=font)
 
 #       im = im.rotate()
     disp.image(im)
-    time.sleep(120)
 
-    print("Re-Connect:Auto Shutting Down in 2 minutes")
-
-    try:
-        response = requests.get(onelink)
-
-    except Exception:
-        print("retry connect internet:can't connect to internet:socket gaierror")
-
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-        im = Image.new("RGB", (240, 240), "red")
-        d = ImageDraw.Draw(im)
-        d.line(((0, 120), (200, 120)), "gray")
-        d.line(((120, 0), (120, 200)), "gray")
-
-        d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
-        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
-        d.text((120, 120), "Retried internet, Still", fill="black", anchor="ms", font=font)
-        d.text((120, 140), "No internet connected", fill="black", anchor="ms", font=font)
-        d.text((120, 160), "Shutting Down", fill="black", anchor="ms", font=font)
-        d.text((120, 180), "now!", fill="black", anchor="ms", font=font)
-#        d.text((120, 200), "fasfd", fill="black", anchor="ms", font=font)
-#        d.text((120, 220), "n in 2mins", fill="black", anchor="ms", font=font)
-
-#       im = im.rotate()
-        disp.image(im)
-        time.sleep(30)
-
-
-        #Shutdown display screen Splash
-        image = Image.open('nftydaze3.jpg')
-        image = image.resize((WIDTH, HEIGHT))
-        print('Drawing image')
-        disp.image(image)
-
-        time.sleep(5)
-        os.system("sudo shutdown -h now")
-        while 1:
-            time.sleep(1)
-    
-   #need bad file error here and in qrcode scanning section
    #inform them of the specific error here
-#except Exception as e:
-#    print("can't connect to internet:Exception")
+except Exception as e:
+    print("can't connect to internet:Exception")
    #inform them that a general error has occurred 
 
 
@@ -253,11 +216,13 @@ button_C.direction = Direction.INPUT
 button_C.pull = digitalio.Pull.UP
 
 
+
 print("""
 Pick your Gan Punk
 """)
 
 #index = 0
+
 
 while True:
     if not button1.value:
@@ -276,9 +241,9 @@ while True:
 
     if not button2.value:
         print("Delete Your NFT")
-#works when setting up minus 1 scrolling, can you say if last button press was up? and if last button press was down? then you can make a logic decision for removenft. also last nft
-#in data base cannot be removed because of cycling action setting up going back to top. not correct with down button (left) removal.
-        removenft = x + 1 
+        removenft = x + 1
+
+#        lines = list()
 
         updatedlist=[]
 
@@ -286,26 +251,26 @@ while True:
             print(type(f))
             read_file = reader(f)
             mylist = list(read_file)
-            print(removenft)
             onelink = mylist[removenft][1]
-            print(onelink)
-#            x = x - 1
+
 #            print(type(mylist))
 #            print(type(mylist[0][0]))
 #            print(type(mylist[0][1]))
 #            reader=csv.reader(f)
 #            print(mylist)
             for row in mylist: #for every row in the file
-#                print(row)
-#                print(row[1])
-#                print(onelink)
+                print(row)
+                print(row[1])
+                print(onelink)
 #                print(type(row[1]))
 #                print(row[1])
                 if row[1]!=onelink: #as long as the username is not in the row .......
                     updatedlist.append(row) #add each row, line by line, into a list called 'udpatedlist'
             print(updatedlist)
-#            print(updatedlist[0][1])
-#            print(type(updatedlist[0][1]))
+            print(updatedlist[0][1])
+            print(type(updatedlist[0][1]))
+            print(updatedlist[0][0])
+            print(type(updatedlist[0][0]))
         with open("qrcodes.csv","w",newline="") as f:
             mywriter=csv.writer(f)
            
@@ -455,7 +420,6 @@ while True:
                 disp.image(img)
                 time.sleep(0.25)
 ## Add except if trying to scan  marketplace, not pure image data 
-## clean or better interpret , and : characters in web links
 ## Add except if no qrcode was scanned
 
                 #if qrcode text is currently not in our csv file, write timestampe and
