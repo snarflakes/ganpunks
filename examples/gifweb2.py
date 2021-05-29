@@ -105,7 +105,7 @@ class AnimatedGif:
     def preload(self):
 #        image = Image.open(self._gif_files[self._index])
 
-        response = requests.get("https://cloudflare-ipfs.com/ipfs/QmbHzjh9xEcMXDCV7UFSwuyNpD3uicByUtmxLrvazTLLUN")
+        response = requests.get("https://cloudflare-ipfs.com/ipfs/QmPmEqqeT4vW7T6Sto6m1Vr5K4ATUZxp9J8RjzS7ZxGxyT")
         image_bytes = io.BytesIO(response.content)
         image = PIL.Image.open(image_bytes)
 #        print("Loading {}...".format(self._gif_files[self._index]))
