@@ -82,7 +82,7 @@ args = vars(ap.parse_args())
 csv2 = open(args["output"], "a")
 found = set()
 
-x = 0
+#x = 0
 
 
 print("""
@@ -278,7 +278,7 @@ while True:
         print("Delete Your NFT")
 #works when setting up minus 1 scrolling, can you say if last button press was up? and if last button press was down? then you can make a logic decision for removenft. also last nft
 #in data base cannot be removed because of cycling action setting up going back to top. not correct with down button (left) removal.
-        removenft = x + 1 
+        removenft = x 
 
         updatedlist=[]
 
@@ -330,7 +330,10 @@ while True:
 
 #        im = im.rotate()
             disp.image(im)
-
+        if x == 0:
+            print("1st nft deleted; restart list")
+            x = (len(apps_data) - 1) 
+        
         time.sleep(0.25)
 
 
@@ -466,7 +469,7 @@ while True:
                     found.add(qrcodeData)
             if not button_R.value:
 
-#To do: Splash: ALL Stored:  Resume Selecting Your NFT to display
+#Splash: ALL Stored:  Resume Selecting Your NFT to display
                 font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
                 im = Image.new("RGB", (240, 240), "yellow")
                 d = ImageDraw.Draw(im)
@@ -483,8 +486,8 @@ while True:
                 d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
 #    im = im.rotate(180)
                 disp.image(im)
-
-#set carousel at newest added nft
+                time.sleep(0.25)
+#set carousel at newest added nft: display new one here too?
                 opened_file = open('qrcodes.csv')
                 read_file = reader(opened_file)
                 apps_data = list(read_file)
@@ -498,15 +501,15 @@ while True:
         print(qrcodeData)
 
     if not button_D.value:
+        x += 1
+        if x > (len(apps_data) - 1):
+            x = 0
         print("Your Saved Gan Punks")
         opened_file = open('qrcodes.csv')
         read_file = reader(opened_file)
         apps_data = list(read_file)
         onelink = apps_data[x][1]
-        x += 1
         print(len(apps_data))
-        if x > (len(apps_data) - 1):
-            x = 0
 
 #display next NFT in order of CSV
         response = requests.get(onelink)
@@ -520,16 +523,16 @@ while True:
     if not button_U.value:
 #reverse direction scrolling
         print("Your Saved Gan Punks:reverse direction")
+        x -= 1
+        if x < 0:
+            x = (len(apps_data) - 1) 
         opened_file = open('qrcodes.csv')
         from csv import reader
         read_file = reader(opened_file)
         apps_data = list(read_file)
         nftlinks = []
         onelink = apps_data[x][1]
-        x -= 1
         print(len(apps_data))
-        if x < 0:
-            x = (len(apps_data) - 1)
 
 #display next NFT in reverse order of CSV
         response = requests.get(onelink)
