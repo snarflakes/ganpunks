@@ -406,10 +406,30 @@ def qr_capture():
             response = requests.get(qrcodeData)
             image_bytes = io.BytesIO(response.content)
 
-#check size
+#check for mp4 image file
+            try:
+                img = PIL.Image.open(image_bytes)
+            except PIL.UnidentifiedImageError:
+                print("MPEG scan attempted")
+                font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+                im = Image.new("RGB", (240, 240), "red")
+                d = ImageDraw.Draw(im)
+#        d.line(((0, 120), (200, 120)), "gray")
+#        d.line(((120, 0), (120, 200)), "gray")
+                d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
+                d.text((120, 100), "DON'T do that", fill="black", anchor="rs", font=font)
+                d.text((120, 120), "NO MPEGS/VIDEOS", fill="black", anchor="ms", font=font)
+                d.text((120, 140), "on this model", fill="black", anchor="ms", font=font)
+                d.text((120, 160), "Press Down to", fill="black", anchor="ms", font=font)
+                d.text((120, 180), "Exit Scanning", fill="black", anchor="ms", font=font)
+                d.text((120, 200), "And Start over again", fill="black", anchor="ms", font=font)
+                d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+#        im = im.rotate()
+                disp.image(im)
+                time.sleep(0.25)
+                break
 
-            img = PIL.Image.open(image_bytes)
-#            try: 
+#check size of image 
             imageload = sys.getsizeof(img.tobytes())
             print("img size in memory in bytes: ", imageload)
             if imageload >36000000:
@@ -438,9 +458,29 @@ def qr_capture():
 #            except stopIteration:
 #                print("close but too big")
 #                break
-
+            
             resized_img = img.resize((WIDTH, HEIGHT))
-            disp.image(resized_img)
+            try:
+                disp.image(resized_img)
+            except ValueError:
+                print("GIF scan attempted")
+                font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+                im = Image.new("RGB", (240, 240), "red")
+                d = ImageDraw.Draw(im)
+#        d.line(((0, 120), (200, 120)), "gray")
+#        d.line(((120, 0), (120, 200)), "gray")
+                d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
+                d.text((120, 100), "DON'T do that", fill="black", anchor="rs", font=font)
+                d.text((120, 120), "NO GIFS", fill="black", anchor="ms", font=font)
+                d.text((120, 140), "on this model", fill="black", anchor="ms", font=font)
+                d.text((120, 160), "Press Down to", fill="black", anchor="ms", font=font)
+                d.text((120, 180), "Exit Scanning", fill="black", anchor="ms", font=font)
+                d.text((120, 200), "And Start over again", fill="black", anchor="ms", font=font)
+                d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+#        im = im.rotate()
+                disp.image(im)
+                time.sleep(0.25)
+                break
             time.sleep(0.50)
 #Go black
             print("QRCode scanned to Display Screen")
@@ -472,7 +512,7 @@ def qr_capture():
 
             d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
             d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
-            d.text((120, 120), "All QRCodes Stored!", fill="black", anchor="ms", font=font)
+            d.text((120, 120), "Ended QRCodes scanning!", fill="black", anchor="ms", font=font)
             d.text((120, 140), "Press Left or", fill="black", anchor="ms", font=font)
             d.text((120, 160), "Right to select", fill="black", anchor="ms", font=font)
             d.text((120, 180), "your preferred NFT", fill="black", anchor="ms", font=font)
