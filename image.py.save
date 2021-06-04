@@ -38,6 +38,9 @@ import datetime
 import imutils
 from csv import reader
 
+#stop process
+from multiprocessing import Process
+
 #menu threading
 #import threading
 #from threading import Thread
@@ -348,6 +351,7 @@ def special_NFT():
     disp.image(resized_img)
     time.sleep(0.25)
 
+
 camera_on = False
 
 def qr_capture():
@@ -386,58 +390,27 @@ def qr_capture():
         for obj in decodedObjects:
             print("Data", obj.data)
             print(type(obj.data))
-#display on screen flash confirmation of reading
-            img = Image.new('RGB', (WIDTH, HEIGHT), color=(255, 255, 255))
-            draw = ImageDraw.Draw(img)
-            disp.image(img)
-            time.sleep(0.25)
-
-            img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
-            draw = ImageDraw.Draw(img)
-            disp.image(img)
-            time.sleep(0.25)
-
-#            cv2.putText(frame, str(obj.data), (50, 50), font, 2,
-#                        (255, 0, 0), 3)
-#convertbytes object data to string
+#display on screen confirmation of reading
+            cv2.putText(frame, str(obj.data), (50, 50), font, 2,
+                        (255, 0, 0), 3)
+                #convertbytes object data to string
             qrcodeData = obj.data.decode("utf-8")
-#flash NFT to signal capture, 
-#first go black/stop scanning/process
+#flash NFT to signal capture
             response = requests.get(qrcodeData)
             image_bytes = io.BytesIO(response.content)
 
 #check size
 
             img = PIL.Image.open(image_bytes)
-#            try: 
-            imageload = sys.getsizeof(img.tobytes())
-            print("img size in memory in bytes: ", imageload)
-            if imageload >36000000:
-                print("close but too big")
-                time.sleep(1)
-                font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-                im = Image.new("RGB", (240, 240), "red")
-                d = ImageDraw.Draw(im)
-#        d.line(((0, 120), (200, 120)), "gray")
-#        d.line(((120, 0), (120, 200)), "gray")
-                d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
-                d.text((120, 100), "DON'T do that", fill="black", anchor="rs", font=font)
-                d.text((120, 120), "again", fill="black", anchor="ms", font=font)
-                d.text((120, 140), "that NFT image file is", fill="black", anchor="ms", font=font)
-                d.text((120, 160), "wayyy too big", fill="black", anchor="ms", font=font)
-                d.text((120, 180), "Press down to start", fill="black", anchor="ms", font=font)
-                d.text((120, 200), "over with a new file!", fill="black", anchor="ms", font=font)
-                d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
-#        im = im.rotate()
-                disp.image(im)
-                time.sleep(0.25)
-                break
-#                if imageload >36000000:
-#                    raise stopIteration
+            try: 
+                imageload = sys.getsizeof(img.tobytes())
+                print("img size in memory in bytes: ", imageload)
+                if imageload >36000000:
+                    raise stopIteration
 
-#            except stopIteration:
-#                print("close but too big")
-#                break
+            except stopIteration:
+                print("close but too big")
+                break
 
             resized_img = img.resize((WIDTH, HEIGHT))
             disp.image(resized_img)
