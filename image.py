@@ -38,6 +38,9 @@ import datetime
 import imutils
 from csv import reader
 
+#check internet
+import socket
+
 #menu threading
 #import threading
 #from threading import Thread
@@ -192,22 +195,33 @@ except Exception:
         while 1:
             time.sleep(1)
     
-   #need bad file error here and in qrcode scanning section
-   #inform them of the specific error here
-#except Exception as e:
-#    print("can't connect to internet:Exception")
-   #inform them that a general error has occurred 
-
-
 image_bytes = io.BytesIO(response.content)
-img = PIL.Image.open(image_bytes)
-resized_img = img.resize((WIDTH, HEIGHT))
-disp.image(resized_img)
-time.sleep(0.25)
+#check for bad link
+try:
+    img = PIL.Image.open(image_bytes)
+    resized_img = img.resize((WIDTH, HEIGHT))
+    disp.image(resized_img)
+    time.sleep(0.25)            
+except PIL.UnidentifiedImageError:
+    print("Bad Link/File")
+
+
+def internet(host="8.8.8.8", port=53, timeout=3):
+	"""
+	Host: 8.8.8.8 (google-public-dns-a.google.com)
+	OpenPort: 53/tcp
+	Service: domain (DNS/TCP)
+	"""
+	try:
+		socket.setdefaulttimeout(timeout)
+		socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
+		return True
+	except socket.error as ex:
+		print(ex)
+		return False
 
 def shut_down():
     print("Shutting Down")
-#Shutdown display screen Splash
     image = Image.open('nftydaze3.jpg')
     image = image.resize((WIDTH, HEIGHT))
     print('Drawing image')
@@ -284,27 +298,29 @@ def delete_NFT():
 #slideshow_on = False
 def slideshow_mode():
 #    global slideshow_on
+
     global apps_data
     print("SlideShow Mode")
 #    if slideshow_on:
+    if internet():
         
-    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 30)
-    im = Image.new("RGB", (240, 240), "pink")
-    d = ImageDraw.Draw(im)
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 30)
+        im = Image.new("RGB", (240, 240), "pink")
+        d = ImageDraw.Draw(im)
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
 
-    d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
 #        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
-    d.text((120, 120), "SlideShow", fill="black", anchor="ms", font=font)
-    d.text((120, 140), "Mode", fill="black", anchor="ms", font=font)
-    d.text((120, 160), "Activated", fill="black", anchor="ms", font=font)
+        d.text((120, 120), "SlideShow", fill="black", anchor="ms", font=font)
+        d.text((120, 140), "Mode", fill="black", anchor="ms", font=font)
+        d.text((120, 160), "Activated", fill="black", anchor="ms", font=font)
 #        d.text((120, 180), "when captured. Repeat.", fill="black", anchor="ms", font=font)
 #        d.text((120, 200), "Press Down when done!", fill="black", anchor="ms", font=font)
 #        d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
 
 #        im = im.rotate()
-    disp.image(im)
+        disp.image(im)
 
 #        for i in range(sys.maxsize**10): 
 #        switch = False
@@ -316,19 +332,30 @@ def slideshow_mode():
 
 #            t1.join()
 #            t2.join()
-    for _ in range(3):
-        for value in apps_data:
+        for _ in range(3):
+            for value in apps_data:
 #            t1.start()
 #            t2.start()
-            print(value[1])
-            onelink = value[1]
-            response = requests.get(onelink)
-            image_bytes = io.BytesIO(response.content)
-            img = PIL.Image.open(image_bytes)
-            resized_img = img.resize((WIDTH, HEIGHT))
-            disp.image(resized_img)
-            time.sleep(5)
-#    slideshow_on = not slideshow_on
+                print(value[1])
+                onelink = value[1]
+                response = requests.get(onelink)
+                image_bytes = io.BytesIO(response.content)
+#scan for corrupted link
+                try:
+                    img = PIL.Image.open(image_bytes)
+                    resized_img = img.resize((WIDTH, HEIGHT))
+                    disp.image(resized_img)
+                    time.sleep(5)            
+                except PIL.UnidentifiedImageError:
+                    print("Bad Link/File")
+               
+            
+            time.sleep(0.25)
+        time.sleep(0.25)
+    else:
+        print("no internet available")
+
+# slideshow_on = not slideshow_on
 #                b.start()
 
 #            if not button_D.value:
@@ -555,11 +582,19 @@ def scroll_NFT():
 #display next NFT in order of CSV
     response = requests.get(onelink)
     image_bytes = io.BytesIO(response.content)
-    img = PIL.Image.open(image_bytes)
-    resized_img = img.resize((WIDTH, HEIGHT))
-    disp.image(resized_img)
-    time.sleep(0.25)
+#check for bad link
+    try:
+        img = PIL.Image.open(image_bytes)
+        resized_img = img.resize((WIDTH, HEIGHT))
+        disp.image(resized_img)
+        time.sleep(0.25)            
+    except PIL.UnidentifiedImageError:
+        print("Bad Link/File")
 
+#    img = PIL.Image.open(image_bytes)
+#    resized_img = img.resize((WIDTH, HEIGHT))
+#    disp.image(resized_img)
+#    time.sleep(0.25)
 
 def reverse_scroll_NFT():
     global apps_data
@@ -580,10 +615,19 @@ def reverse_scroll_NFT():
 #display next NFT in reverse order of CSV
     response = requests.get(onelink)
     image_bytes = io.BytesIO(response.content)
-    img = PIL.Image.open(image_bytes)
-    resized_img = img.resize((WIDTH, HEIGHT))
-    disp.image(resized_img)
-    time.sleep(0.25)
+#screen for bad link
+    try:
+        img = PIL.Image.open(image_bytes)
+        resized_img = img.resize((WIDTH, HEIGHT))
+        disp.image(resized_img)
+        time.sleep(0.25)            
+    except PIL.UnidentifiedImageError:
+        print("Bad Link/File")
+
+#    img = PIL.Image.open(image_bytes)
+#    resized_img = img.resize((WIDTH, HEIGHT))
+#    disp.image(resized_img)
+#    time.sleep(0.25)
 
 
 button1 = Button(21)
