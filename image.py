@@ -578,7 +578,100 @@ def no_NFT():
             print("shutting down")
             shutdown()
 
+def push_button2():
+    start_time=time.time()
+    hold_time = 4
+    diff=0
 
+    while button2.is_active and (diff <hold_time) :
+        now_time=time.time()
+        diff=-start_time+now_time
+
+    if diff < hold_time :
+        delete_NFT()
+    else:
+        long_push2()
+
+def long_push2():
+    print("Reset NFT storage")
+    print("in 2 minutes all stored NFT's will be wiped out then device will shut down")
+    print("quickly tap shut off button to stop process")
+    time.sleep(5)
+    os.remove('qrcodes.csv')
+    time.sleep(0.25)
+    shut_down()
+
+def push_button():
+    start_time=time.time()
+    hold_time = 2
+    diff=0
+
+    while button3.is_active and (diff <hold_time) :
+        now_time=time.time()
+        diff=-start_time+now_time
+
+    if diff < hold_time :
+        slideshow_mode()
+    else:
+        long_push()
+
+def long_push():
+    global apps_data
+    print("LONG SlideShow Mode")
+#    if slideshow_on:
+    if internet():
+        
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 30)
+        im = Image.new("RGB", (240, 240), "pink")
+        d = ImageDraw.Draw(im)
+#        d.line(((0, 120), (200, 120)), "gray")
+#        d.line(((120, 0), (120, 200)), "gray")
+
+        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+#        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+        d.text((120, 120), "LONG SlideShow", fill="black", anchor="ms", font=font)
+        d.text((120, 140), "Mode", fill="black", anchor="ms", font=font)
+        d.text((120, 160), "Activated", fill="black", anchor="ms", font=font)
+#        d.text((120, 180), "when captured. Repeat.", fill="black", anchor="ms", font=font)
+#        d.text((120, 200), "Press Down when done!", fill="black", anchor="ms", font=font)
+#        d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+
+#        im = im.rotate()
+        disp.image(im)
+
+#        for i in range(sys.maxsize**10): 
+#        switch = False
+#        for _ in range(sys.maxsize**10):
+#            t1 = threading.Thread(target=do_something)
+#            t2 = threading.Thread(target=do_somethingstop)
+#            t2.start()
+#            t1.start()
+
+#            t1.join()
+#            t2.join()
+        for _ in range(3):
+            for value in apps_data:
+#            t1.start()
+#            t2.start()
+                print(value[1])
+                onelink = value[1]
+                response = requests.get(onelink)
+                image_bytes = io.BytesIO(response.content)
+#scan for corrupted link
+                try:
+                    img = PIL.Image.open(image_bytes)
+                    resized_img = img.resize((WIDTH, HEIGHT))
+                    disp.image(resized_img)
+                    time.sleep(5)            
+                except PIL.UnidentifiedImageError:
+                    print("Bad Link/File")
+               
+            
+            time.sleep(0.25)
+        time.sleep(0.25)
+    else:
+        print("no internet available")
+    
 
 button1 = Button(21)
 button2 = Button(20)
@@ -679,8 +772,10 @@ Pick your Gan Punk
 
 try: 
     button1.when_pressed = shut_down
-    button2.when_pressed = delete_NFT
-    button3.when_pressed = slideshow_mode
+#    button2.when_pressed = delete_NFT
+    button2.when_pressed = push_button2
+#    button3.when_pressed = slideshow_mode
+    button3.when_pressed = push_button
     buttonL.when_pressed = special_NFT
     buttonC.when_pressed = qr_capture
     buttonD.when_pressed = scroll_NFT
