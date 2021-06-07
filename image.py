@@ -105,12 +105,11 @@ backlight = DigitalInOut(board.D24)
 backlight.switch_to_output()
 backlight.value = True
 
-
 WIDTH = disp.width
 HEIGHT = disp.height
 
 print("""
-image.py - Display an image on the LCD.
+image.py - Display an NFT image weblink on the IPS LCD.
 
 """)
 
@@ -122,88 +121,11 @@ print('Drawing Splash image')
 disp.image(image)
 time.sleep(6)
 
-# Added default most recently added NFT as base NFT displayed (can increase splash screen time)
+# Added default most recently added NFT as base NFT displayed (can increase splash screen time): rest of onboarding below functions
 
 opened_file = open('qrcodes.csv')
 read_file = reader(opened_file)
 apps_data = list(read_file)
-x = (len(apps_data) - 1)
-onelink = apps_data[x][1]
-
-#check internet connection
-try:
-    response = requests.get(onelink)
-
-except Exception:
-    print("can't connect to internet:socket gaierror")
-
-    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-    im = Image.new("RGB", (240, 240), "blue")
-    d = ImageDraw.Draw(im)
-    d.line(((0, 120), (200, 120)), "gray")
-    d.line(((120, 0), (120, 200)), "gray")
-
-    d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
-    d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
-    d.text((120, 120), "No internet connected", fill="black", anchor="ms", font=font)
-    d.text((120, 140), "to fetch NFT images", fill="black", anchor="ms", font=font)
-    d.text((120, 160), "Connect your phone", fill="black", anchor="ms", font=font)
-    d.text((120, 180), "wifi to 'HomeBridge'", fill="black", anchor="ms", font=font)
-    d.text((120, 200), "Iphone to Iphone Hotspots", fill="black", anchor="ms", font=font)
-    d.text((120, 220), "don't work:shutting down in 2mins", fill="black", anchor="ms", font=font)
-
-#       im = im.rotate()
-    disp.image(im)
-    time.sleep(120)
-
-    print("Re-Connect:Auto Shutting Down in 2 minutes")
-
-    try:
-        response = requests.get(onelink)
-
-    except Exception:
-        print("retry connect internet:can't connect to internet:socket gaierror")
-
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-        im = Image.new("RGB", (240, 240), "red")
-        d = ImageDraw.Draw(im)
-        d.line(((0, 120), (200, 120)), "gray")
-        d.line(((120, 0), (120, 200)), "gray")
-
-        d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
-        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
-        d.text((120, 120), "Retried internet, Still", fill="black", anchor="ms", font=font)
-        d.text((120, 140), "No internet connected", fill="black", anchor="ms", font=font)
-        d.text((120, 160), "Shutting Down", fill="black", anchor="ms", font=font)
-        d.text((120, 180), "now!", fill="black", anchor="ms", font=font)
-#        d.text((120, 200), "fasfd", fill="black", anchor="ms", font=font)
-#        d.text((120, 220), "n in 2mins", fill="black", anchor="ms", font=font)
-
-#       im = im.rotate()
-        disp.image(im)
-        time.sleep(30)
-
-
-        #Shutdown display screen Splash
-        image = Image.open('nftydaze3.jpg')
-        image = image.resize((WIDTH, HEIGHT))
-        print('Drawing image')
-        disp.image(image)
-
-        time.sleep(5)
-        os.system("sudo shutdown -h now")
-        while 1:
-            time.sleep(1)
-    
-image_bytes = io.BytesIO(response.content)
-#check for bad link
-try:
-    img = PIL.Image.open(image_bytes)
-    resized_img = img.resize((WIDTH, HEIGHT))
-    disp.image(resized_img)
-    time.sleep(0.25)            
-except PIL.UnidentifiedImageError:
-    print("Bad Link/File")
 
 
 def internet(host="8.8.8.8", port=53, timeout=3):
@@ -226,8 +148,12 @@ def shut_down():
     image = image.resize((WIDTH, HEIGHT))
     print('Drawing image')
     disp.image(image)
-
     time.sleep(5)
+    img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    disp.image(img)
+    time.sleep(0.25)
+
     os.system("sudo shutdown -h now")
     while 1:
         time.sleep(1)
@@ -236,8 +162,6 @@ def delete_NFT():
     global x
     global apps_data
     print("Delete Your NFT")
-#works when setting up minus 1 scrolling, can you say if last button press was up? and if last button press was down? then you can make a logic decision for removenft. also last nft
-#in data base cannot be removed because of cycling action setting up going back to top. not correct with down button (left) removal.
     removenft = x 
     updatedlist=[]
 
@@ -292,6 +216,8 @@ def delete_NFT():
     if x == 0:
         print("1st nft deleted; restart list")
         x = (len(apps_data) - 1) 
+        #force onboarding
+        no_NFT()
         
     time.sleep(0.25)
 
@@ -561,10 +487,7 @@ def qr_capture():
     cv2.destroyAllWindows()
 #    print(qrcodeData)
 
-
-
 #    camera_on = not camera_on
-
 
 def scroll_NFT():
     global apps_data
@@ -590,11 +513,6 @@ def scroll_NFT():
         time.sleep(0.25)            
     except PIL.UnidentifiedImageError:
         print("Bad Link/File")
-
-#    img = PIL.Image.open(image_bytes)
-#    resized_img = img.resize((WIDTH, HEIGHT))
-#    disp.image(resized_img)
-#    time.sleep(0.25)
 
 def reverse_scroll_NFT():
     global apps_data
@@ -624,10 +542,42 @@ def reverse_scroll_NFT():
     except PIL.UnidentifiedImageError:
         print("Bad Link/File")
 
-#    img = PIL.Image.open(image_bytes)
-#    resized_img = img.resize((WIDTH, HEIGHT))
-#    disp.image(resized_img)
-#    time.sleep(0.25)
+def no_NFT():
+    opened_file = open('qrcodes.csv')
+    read_file = reader(opened_file)
+    apps_data = list(read_file)
+    if (len(apps_data)) == 0:
+        print("No NFT's stored")
+        if internet():
+            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+            im = Image.new("RGB", (240, 240), "yellow")
+            d = ImageDraw.Draw(im)
+            d.line(((0, 120), (200, 120)), "gray")
+            d.line(((120, 0), (120, 200)), "gray")
+  
+            d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
+            d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+            d.text((120, 120), "Welcome to NFTYdaze. ", fill="black", anchor="ms", font=font)
+            d.text((120, 140), "Find an NFT on opensea.io", fill="black", anchor="ms", font=font)
+            d.text((120, 160), "(Image only, no GIFS/Videos)", fill="black", anchor="ms", font=font)
+            d.text((120, 180), "QRcode scanning to start in 30s", fill="black", anchor="ms", font=font)
+            d.text((120, 200), "Once NFT flashes, Press down to exit", fill="black", anchor="ms", font=font)
+            d.text((120, 220), "If still no internet or scanning, shutting down", fill="black", anchor="ms", font=font)
+
+#       im = im.rotate()
+            disp.image(im)
+            time.sleep(40)
+
+            qr_capture()
+            time.sleep(0.25)
+
+        else:
+            print("still no internet")
+        #cut and paste internet issue below? Turn into a function probably
+            time.sleep(40)
+            print("shutting down")
+            shutdown()
+
 
 
 button1 = Button(21)
@@ -639,6 +589,89 @@ buttonR = Button(26)
 buttonU = Button(6) 
 buttonD = Button(19)
 buttonC = Button(13)
+
+
+#check if user needs onboarding/load NFTs
+no_NFT()
+
+x = (len(apps_data) - 1)
+onelink = apps_data[x][1]
+
+#check internet connection
+try:
+    response = requests.get(onelink)
+
+except Exception:
+    print("can't connect to internet:socket gaierror")
+
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+    im = Image.new("RGB", (240, 240), "blue")
+    d = ImageDraw.Draw(im)
+    d.line(((0, 120), (200, 120)), "gray")
+    d.line(((120, 0), (120, 200)), "gray")
+
+    d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
+    d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+    d.text((120, 120), "No internet connected", fill="black", anchor="ms", font=font)
+    d.text((120, 140), "to fetch NFT images", fill="black", anchor="ms", font=font)
+    d.text((120, 160), "Connect your phone", fill="black", anchor="ms", font=font)
+    d.text((120, 180), "wifi to 'HomeBridge'", fill="black", anchor="ms", font=font)
+    d.text((120, 200), "Iphone to Iphone Hotspots", fill="black", anchor="ms", font=font)
+    d.text((120, 220), "don't work:shutting down in 2mins", fill="black", anchor="ms", font=font)
+
+#       im = im.rotate()
+    disp.image(im)
+    time.sleep(160)
+
+    print("Re-Connect:Auto Shutting Down in 2 minutes")
+
+    try:
+        response = requests.get(onelink)
+
+    except Exception:
+        print("retry connect internet:can't connect to internet:socket gaierror")
+
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+        im = Image.new("RGB", (240, 240), "red")
+        d = ImageDraw.Draw(im)
+        d.line(((0, 120), (200, 120)), "gray")
+        d.line(((120, 0), (120, 200)), "gray")
+
+        d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
+        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+        d.text((120, 120), "Retried internet, Still", fill="black", anchor="ms", font=font)
+        d.text((120, 140), "No internet connected", fill="black", anchor="ms", font=font)
+        d.text((120, 160), "Shutting Down", fill="black", anchor="ms", font=font)
+        d.text((120, 180), "now!", fill="black", anchor="ms", font=font)
+#        d.text((120, 200), "fasfd", fill="black", anchor="ms", font=font)
+#        d.text((120, 220), "n in 2mins", fill="black", anchor="ms", font=font)
+
+#       im = im.rotate()
+        disp.image(im)
+        time.sleep(30)
+
+
+        #Shutdown display screen Splash
+        image = Image.open('nftydaze3.jpg')
+        image = image.resize((WIDTH, HEIGHT))
+        print('Drawing image')
+        disp.image(image)
+
+        time.sleep(5)
+        os.system("sudo shutdown -h now")
+        while 1:
+            time.sleep(1)
+    
+image_bytes = io.BytesIO(response.content)
+#check for bad link
+try:
+    img = PIL.Image.open(image_bytes)
+    resized_img = img.resize((WIDTH, HEIGHT))
+    disp.image(resized_img)
+    time.sleep(0.25)            
+except PIL.UnidentifiedImageError:
+    print("Bad Link/File")
+
 
 print("""
 Pick your Gan Punk
