@@ -41,6 +41,19 @@ from csv import reader
 #check internet
 import socket
 
+#screen rotate
+import pickle
+
+#example_d = [90,180]
+#pickle_out = open("d.pickle","wb")
+#pickle.dump(example_d, pickle_out)
+#pickle_out.close()
+
+pickle_in = open("d.pickle","rb")
+example_d = pickle.load(pickle_in)
+print(example_d[0])
+
+
 #menu threading
 #import threading
 #from threading import Thread
@@ -93,7 +106,7 @@ disp = st7789.ST7789(
     spi,
     height=240,
     y_offset=80,
-    rotation=180,
+    rotation=example_d[0],
     cs=cs_pin,
     dc=dc_pin,
     rst=reset_pin,
@@ -611,7 +624,17 @@ def push_button():
         diff=-start_time+now_time
 
     if diff < hold_time :
-        slideshow_mode()
+#        slideshow_mode()
+        scroll_NFT()
+
+# track length of time button pressed?
+
+#    elif button3.is_released and diff >= 10 and diff < 20:
+#        print("held for 10 to 20 seconds")
+
+#    elif button3.is_released and diff >= 2 and diff < 10:
+#        print("held for 2 to 10 seconds")
+
     else:
         long_push()
 
@@ -671,6 +694,34 @@ def long_push():
         time.sleep(0.25)
     else:
         print("no internet available")
+
+def flip_screen():
+    example_d[0], example_d[1] = example_d[1], example_d[0]
+    print(example_d[0])
+    pickle_out = open("d.pickle","wb")
+    pickle.dump(example_d, pickle_out)
+    pickle_out.close()
+#    return example_d
+
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 30)
+    im = Image.new("RGB", (240, 240), "orange")
+    d = ImageDraw.Draw(im)
+#        d.line(((0, 120), (200, 120)), "gray")
+#        d.line(((120, 0), (120, 200)), "gray")
+
+    d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+#       d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+    d.text((120, 120), "Flip Mode", fill="black", anchor="ms", font=font)
+    d.text((120, 140), "Squad:", fill="black", anchor="ms", font=font)
+    d.text((120, 160), "Activated", fill="black", anchor="ms", font=font)
+    d.text((120, 180), "Rebooting....", fill="black", anchor="ms", font=font)
+#        d.text((120, 200), "Press Down when done!", fill="black", anchor="ms", font=font)
+#        d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+
+#        im = im.rotate()
+    disp.image(im)
+    time.sleep(3)
+    os.system("sudo reboot now")
     
 
 button1 = Button(21)
@@ -776,7 +827,8 @@ try:
     button2.when_pressed = push_button2
 #    button3.when_pressed = slideshow_mode
     button3.when_pressed = push_button
-    buttonL.when_pressed = special_NFT
+#    buttonL.when_pressed = special_NFT
+    buttonL.when_pressed = flip_screen
     buttonC.when_pressed = qr_capture
     buttonD.when_pressed = scroll_NFT
     buttonU.when_pressed = reverse_scroll_NFT

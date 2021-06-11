@@ -89,7 +89,7 @@ from PIL import ImageSequence
 with Image.open("deployrainbows.gif") as im:
     for frame in ImageSequence.Iterator(im):
         im.seek(1) # skip to the second frame
-
+        time.sleep(1)
         try:
             while 1:
                 im.seek(im.tell()+1)
