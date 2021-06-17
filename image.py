@@ -44,6 +44,11 @@ import socket
 #screen rotate
 import pickle
 
+#random
+from random import randint
+
+import string
+
 #example_d = [90,180]
 #pickle_out = open("d.pickle","wb")
 #pickle.dump(example_d, pickle_out)
@@ -126,19 +131,45 @@ image.py - Display an NFT image weblink on the IPS LCD.
 
 """)
 
-#splash screen
-image = Image.open('nftydaze3.jpg')
-image = image.resize((WIDTH, HEIGHT))
-# Draw the image on the display hardware.
-print('Drawing Splash image')
-disp.image(image)
-time.sleep(6)
-
-# Added default most recently added NFT as base NFT displayed (can increase splash screen time): rest of onboarding below functions
-
 opened_file = open('qrcodes.csv')
 read_file = reader(opened_file)
 apps_data = list(read_file)
+
+def splash_screen():
+    print("drawing splash screen")
+    picture_1 = Image.open("nftydaze4.jpg")
+    image = picture_1.resize((WIDTH, HEIGHT))
+    disp.image(image)
+
+    WIDTH_dot = range(WIDTH)
+    HEIGHT_dot = range(1,65)
+
+    for y in (HEIGHT_dot[1::4]) :
+        disp.image(image)
+        for x in (WIDTH_dot[1::4]) :
+#r = 0,25 for bluish randomness
+            r = randint(0,255)
+            g = randint(0,255)
+            b = randint(0,255)
+            image.putpixel((x,y), (r, g, b))
+
+    picture_1 = Image.open("nftydaze4.jpg")
+    image = picture_1.resize((WIDTH, HEIGHT))
+
+    disp.image(image)
+
+    for y in (HEIGHT_dot[1::4]) :
+        for x in (WIDTH_dot[1::4]) :
+            r = randint(0,255)
+            g = randint(0,255)
+            b = randint(0,255)
+            image.putpixel((x,y), (r, g, b))
+
+    disp.image(image)
+
+    picture_1 = Image.open("nftydaze4.jpg")
+    image = picture_1.resize((WIDTH, HEIGHT))
+    disp.image(image)
 
 
 def internet(host="8.8.8.8", port=53, timeout=3):
@@ -154,6 +185,70 @@ def internet(host="8.8.8.8", port=53, timeout=3):
 	except socket.error as ex:
 		print(ex)
 		return False
+
+def art(im):
+    def r():
+        r = random.randint(0,255)
+        return r
+    def g():
+        g = random.randint(0,255)
+        return g
+    def b():
+        b = random.randint(0,255)
+        return b
+
+    def punct():
+        letters = string.punctuation + '£¬' + chr(162) + chr(165) + chr(176) + chr(222) + chr(223)
+        return random.choice(letters)
+
+    d = ImageDraw.Draw(im)
+    draw = ImageDraw.Draw(im)
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 20)
+
+    draw.rectangle([(0,0),(30,30)], fill=(r(),g(),b()), outline=(255,255,255))
+    d.text((10,10), f"{punct()}", fill="white", anchor="mt", font=font)
+    d.text((10,10), f"{punct()}", fill="white", anchor="mt", font=font)
+    draw.rectangle([(30,0),(60,30)], fill=(r(),g(),b()), outline=(0,0,0))
+    d.text((40,10), f"{punct()}", fill="white", anchor="mt", font=font)
+    d.text((40,10), f"{punct()}", fill="white", anchor="mt", font=font)
+    draw.rectangle([(60,0),(90,30)], fill=(r(),g(),b()), outline=(255,255,255))
+    d.text((70,10), f"{punct()}", fill="white", anchor="mt", font=font)
+    d.text((70,10), f"{punct()}", fill="white", anchor="mt", font=font)
+    draw.rectangle([(90,0),(120,30)], fill=(r(),g(),b()), outline=(0,0,0))
+    d.text((100,10), f"{punct()}", fill="white", anchor="mt", font=font)
+    d.text((100,10), f"{punct()}", fill="white", anchor="mt", font=font)
+    draw.rectangle([(120,0),(150,30)], fill=(r(),g(),b()), outline=(255,255,255))
+    d.text((130,10), f"{punct()}", fill="white", anchor="mt", font=font)
+    d.text((130,10), f"{punct()}", fill="white", anchor="mt", font=font)
+    draw.rectangle([(150,0),(180,30)], fill=(r(),g(),b()), outline=(0,0,0))
+    d.text((160,10), f"{punct()}", fill="white", anchor="mt", font=font)
+    d.text((160,10), f"{punct()}", fill="white", anchor="mt", font=font)
+    draw.rectangle([(180,0),(210,30)], fill=(r(),g(),b()), outline=(255,255,255))
+    d.text((190,10), f"{punct()}", fill="white", anchor="mt", font=font)
+    d.text((190,10), f"{punct()}", fill="white", anchor="mt", font=font)
+    draw.rectangle([(210,0),(240,30)], fill=(r(),g(),b()), outline=(0,0,0))
+    d.text((220,10), f"{punct()}", fill="white", anchor="mt", font=font)
+    d.text((220,10), f"{punct()}", fill="white", anchor="mt", font=font)
+    disp.image(im)
+
+#first one is an error showing black mountaintop
+    draw.polygon(((210,80), (0,30), (30,0)), fill=(0,0,0), outline=(255,255,255))
+    disp.image(im)
+    draw.polygon(((210,80), (30,30), (60,30)), fill=(0,0,0), outline=(255,255,255))
+    disp.image(im)
+    draw.polygon(((210,80), (60,30), (90,30)), fill=(0,0,0), outline=(255,255,255))
+    disp.image(im)
+    draw.polygon(((210,80), (90,30), (120,30)), fill=(0,0,0), outline=(255,255,255))
+    disp.image(im)
+    draw.polygon(((210,80), (120,30), (150,30)), fill=(0,0,0), outline=(255,255,255))
+    disp.image(im)
+    draw.polygon(((210,80), (150,30), (180,30)), fill=(0,0,0), outline=(255,255,255))
+    disp.image(im)
+    draw.polygon(((210,80), (180,30), (210,30)), fill=(0,0,0), outline=(255,255,255))
+    disp.image(im)
+    draw.polygon(((210,80), (210,30), (240,30)), fill=(0,0,0), outline=(255,255,255))
+    disp.image(im)
+    return im,d
 
 def shut_down():
     print("Shutting Down")
@@ -248,7 +343,7 @@ def slideshow_mode():
         d = ImageDraw.Draw(im)
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
-
+        art()
         d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
 #        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
         d.text((120, 120), "SlideShow", fill="black", anchor="ms", font=font)
@@ -260,7 +355,7 @@ def slideshow_mode():
 
 #        im = im.rotate()
         disp.image(im)
-
+        time.sleep(2)
 #        for i in range(sys.maxsize**10): 
 #        switch = False
 #        for _ in range(sys.maxsize**10):
@@ -305,15 +400,6 @@ def slideshow_mode():
  
              #how to stop loop? if any other button is pressed?
 
-def special_NFT():
-    print("Your fourth Gan Punk")
-    response = requests.get("https://lh3.googleusercontent.com/zpZj6rX-zlK7qTvqyDpMUdZy3HHjY1t1QpjQ6mXglYt3pZig1ACkQeA7hW8nyzwQpFA5QCDzHdd61Xy2xKZuvc_bQCfjmTFphUzc=s0")
-    image_bytes = io.BytesIO(response.content)
-    img = PIL.Image.open(image_bytes)
-    resized_img = img.resize((WIDTH, HEIGHT))
-    disp.image(resized_img)
-    time.sleep(0.25)
-
 camera_on = False
 
 def qr_capture():
@@ -336,7 +422,7 @@ def qr_capture():
     d.text((120, 140), "from QR Codes", fill="black", anchor="ms", font=font)
     d.text((120, 160), "New NFT will flash", fill="black", anchor="ms", font=font)
     d.text((120, 180), "when captured. Repeat.", fill="black", anchor="ms", font=font)
-    d.text((120, 200), "Press Down when done!", fill="black", anchor="ms", font=font)
+    d.text((120, 200), "Press Save when done!", fill="black", anchor="ms", font=font)
     d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
 
 #        im = im.rotate()
@@ -386,7 +472,7 @@ def qr_capture():
                 d.text((120, 100), "DON'T do that", fill="black", anchor="rs", font=font)
                 d.text((120, 120), "NO MPEGS/VIDEOS", fill="black", anchor="ms", font=font)
                 d.text((120, 140), "on this model", fill="black", anchor="ms", font=font)
-                d.text((120, 160), "Press Down to", fill="black", anchor="ms", font=font)
+                d.text((120, 160), "Press Save to", fill="black", anchor="ms", font=font)
                 d.text((120, 180), "Exit Scanning", fill="black", anchor="ms", font=font)
                 d.text((120, 200), "And Start over again", fill="black", anchor="ms", font=font)
                 d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
@@ -411,7 +497,7 @@ def qr_capture():
                 d.text((120, 120), "again", fill="black", anchor="ms", font=font)
                 d.text((120, 140), "that NFT image file is", fill="black", anchor="ms", font=font)
                 d.text((120, 160), "wayyy too big", fill="black", anchor="ms", font=font)
-                d.text((120, 180), "Press down to start", fill="black", anchor="ms", font=font)
+                d.text((120, 180), "Press Save to start", fill="black", anchor="ms", font=font)
                 d.text((120, 200), "over with a new file!", fill="black", anchor="ms", font=font)
                 d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
 #        im = im.rotate()
@@ -439,7 +525,7 @@ def qr_capture():
                 d.text((120, 100), "DON'T do that", fill="black", anchor="rs", font=font)
                 d.text((120, 120), "NO GIFS", fill="black", anchor="ms", font=font)
                 d.text((120, 140), "on this model", fill="black", anchor="ms", font=font)
-                d.text((120, 160), "Press Down to", fill="black", anchor="ms", font=font)
+                d.text((120, 160), "Press Save to", fill="black", anchor="ms", font=font)
                 d.text((120, 180), "Exit Scanning", fill="black", anchor="ms", font=font)
                 d.text((120, 200), "And Start over again", fill="black", anchor="ms", font=font)
                 d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
@@ -479,8 +565,8 @@ def qr_capture():
             d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
             d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
             d.text((120, 120), "Ended QRCodes scanning!", fill="black", anchor="ms", font=font)
-            d.text((120, 140), "Press Left or", fill="black", anchor="ms", font=font)
-            d.text((120, 160), "Right to select", fill="black", anchor="ms", font=font)
+            d.text((120, 140), "Press either Scroll", fill="black", anchor="ms", font=font)
+            d.text((120, 160), "Direction to select", fill="black", anchor="ms", font=font)
             d.text((120, 180), "your preferred NFT", fill="black", anchor="ms", font=font)
             d.text((120, 200), "to be displayed", fill="black", anchor="ms", font=font)
             d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
@@ -505,56 +591,96 @@ def qr_capture():
 def scroll_NFT():
     global apps_data
     global x
-    x += 1
-    if x > (len(apps_data) - 1):
-        x = 0
-    print("Your Saved Gan Punks")
-    opened_file = open('qrcodes.csv')
-    read_file = reader(opened_file)
-    apps_data = list(read_file)
-    onelink = apps_data[x][1]
-    print(len(apps_data))
+    if internet():
+        print("Your Saved Gan Punks")
+        x += 1
+        if x > (len(apps_data) - 1):
+            x = 0
+        opened_file = open('qrcodes.csv')
+        read_file = reader(opened_file)
+        apps_data = list(read_file)
+        onelink = apps_data[x][1]
+        print(len(apps_data))
 
 #display next NFT in order of CSV
-    response = requests.get(onelink)
-    image_bytes = io.BytesIO(response.content)
+        response = requests.get(onelink)
+        image_bytes = io.BytesIO(response.content)
 #check for bad link
-    try:
-        img = PIL.Image.open(image_bytes)
-        resized_img = img.resize((WIDTH, HEIGHT))
-        disp.image(resized_img)
-        time.sleep(0.25)            
-    except PIL.UnidentifiedImageError:
-        print("Bad Link/File")
+        try:
+            img = PIL.Image.open(image_bytes)
+            resized_img = img.resize((WIDTH, HEIGHT))
+            disp.image(resized_img)
+            time.sleep(0.25)            
+        except PIL.UnidentifiedImageError:
+            print("Bad Link/File")
+    else:
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+        im = Image.new("RGB", (240, 240), "red")
+        d = ImageDraw.Draw(im)
+#        d.line(((0, 120), (200, 120)), "gray")
+#        d.line(((120, 0), (120, 200)), "gray")
 
+        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+        d.text((120, 120), "You are out", fill="black", anchor="ms", font=font)
+        d.text((120, 140), "of wifi range", fill="black", anchor="ms", font=font)
+        d.text((120, 160), "or wifi setup", fill="black", anchor="ms", font=font)
+        d.text((120, 180), "went wrong.", fill="black", anchor="ms", font=font)
+        d.text((120, 200), "Move closer to router", fill="black", anchor="ms", font=font)
+        d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+
+#        im = im.rotate()
+        disp.image(im)
+        print("no internet available")
+ 
 def reverse_scroll_NFT():
     global apps_data
     global x
 #reverse direction scrolling
-    print("Your Saved Gan Punks:reverse direction")
-    x -= 1
-    if x < 0:
-        x = (len(apps_data) - 1) 
-    opened_file = open('qrcodes.csv')
-    from csv import reader
-    read_file = reader(opened_file)
-    apps_data = list(read_file)
-    nftlinks = []
-    onelink = apps_data[x][1]
-    print(len(apps_data))
+    if internet():
+        print("Your Saved Gan Punks:reverse direction")
+        x -= 1
+        if x < 0:
+            x = (len(apps_data) - 1) 
+        opened_file = open('qrcodes.csv')
+        read_file = reader(opened_file)
+        apps_data = list(read_file)
+        nftlinks = []
+        onelink = apps_data[x][1]
+        print(len(apps_data))
 
 #display next NFT in reverse order of CSV
-    response = requests.get(onelink)
-    image_bytes = io.BytesIO(response.content)
+        response = requests.get(onelink)
+        image_bytes = io.BytesIO(response.content)
 #screen for bad link
-    try:
-        img = PIL.Image.open(image_bytes)
-        resized_img = img.resize((WIDTH, HEIGHT))
-        disp.image(resized_img)
-        time.sleep(0.25)            
-    except PIL.UnidentifiedImageError:
-        print("Bad Link/File")
+        try:
+            img = PIL.Image.open(image_bytes)
+            resized_img = img.resize((WIDTH, HEIGHT))
+            disp.image(resized_img)
+            time.sleep(0.25)            
+        except PIL.UnidentifiedImageError:
+            print("Bad Link/File")
 
+    else: 
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+        im = Image.new("RGB", (240, 240), "red")
+        d = ImageDraw.Draw(im)
+#        d.line(((0, 120), (200, 120)), "gray")
+#        d.line(((120, 0), (120, 200)), "gray")
+
+        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+        d.text((120, 120), "You are out", fill="black", anchor="ms", font=font)
+        d.text((120, 140), "of wifi range", fill="black", anchor="ms", font=font)
+        d.text((120, 160), "or wifi setup", fill="black", anchor="ms", font=font)
+        d.text((120, 180), "went wrong.", fill="black", anchor="ms", font=font)
+        d.text((120, 200), "Move closer to router", fill="black", anchor="ms", font=font)
+        d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+
+#        im = im.rotate()
+        disp.image(im)
+        print("no internet available")
+   
 def no_NFT():
     opened_file = open('qrcodes.csv')
     read_file = reader(opened_file)
@@ -574,7 +700,7 @@ def no_NFT():
             d.text((120, 140), "Find an NFT on opensea.io", fill="black", anchor="ms", font=font)
             d.text((120, 160), "(Image only, no GIFS/Videos)", fill="black", anchor="ms", font=font)
             d.text((120, 180), "QRcode scanning to start in 30s", fill="black", anchor="ms", font=font)
-            d.text((120, 200), "Once NFT flashes, Press down to exit", fill="black", anchor="ms", font=font)
+            d.text((120, 200), "Once NFT flashes, Press Save to exit", fill="black", anchor="ms", font=font)
             d.text((120, 220), "If still no internet or scanning, shutting down", fill="black", anchor="ms", font=font)
 
 #       im = im.rotate()
@@ -647,9 +773,10 @@ def long_push():
         font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 30)
         im = Image.new("RGB", (240, 240), "pink")
         d = ImageDraw.Draw(im)
+
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
-
+        art(im)
         d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
 #        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
         d.text((120, 120), "LONG SlideShow", fill="black", anchor="ms", font=font)
@@ -661,7 +788,7 @@ def long_push():
 
 #        im = im.rotate()
         disp.image(im)
-
+        time.sleep(4)
 #        for i in range(sys.maxsize**10): 
 #        switch = False
 #        for _ in range(sys.maxsize**10):
@@ -721,6 +848,10 @@ def flip_screen():
 #        im = im.rotate()
     disp.image(im)
     time.sleep(3)
+    img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    disp.image(img)
+    time.sleep(0.25)
     os.system("sudo reboot now")
     
 
@@ -735,9 +866,13 @@ buttonD = Button(19)
 buttonC = Button(13)
 
 
+#start with splash
+splash_screen()
+
 #check if user needs onboarding/load NFTs
 no_NFT()
 
+# Added default most recently added NFT as base NFT displayed (can increase splash screen time): rest of onboarding below functions
 x = (len(apps_data) - 1)
 onelink = apps_data[x][1]
 
@@ -796,12 +931,17 @@ except Exception:
 
 
         #Shutdown display screen Splash
-        image = Image.open('nftydaze3.jpg')
+        image = Image.open('nftydaze4.jpg')
         image = image.resize((WIDTH, HEIGHT))
         print('Drawing image')
         disp.image(image)
 
         time.sleep(5)
+        img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
+        draw = ImageDraw.Draw(img)
+        disp.image(img)
+        time.sleep(0.25)
+
         os.system("sudo shutdown -h now")
         while 1:
             time.sleep(1)
@@ -827,7 +967,6 @@ try:
     button2.when_pressed = push_button2
 #    button3.when_pressed = slideshow_mode
     button3.when_pressed = push_button
-#    buttonL.when_pressed = special_NFT
     buttonL.when_pressed = flip_screen
     buttonC.when_pressed = qr_capture
     buttonD.when_pressed = scroll_NFT
