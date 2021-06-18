@@ -805,17 +805,50 @@ def long_push():
 #            t2.start()
                 print(value[1])
                 onelink = value[1]
-                response = requests.get(onelink)
-                image_bytes = io.BytesIO(response.content)
+                if internet():
+                    try:
+                        response = requests.get(onelink)
+                        image_bytes = io.BytesIO(response.content)
 #scan for corrupted link
-                try:
-                    img = PIL.Image.open(image_bytes)
-                    resized_img = img.resize((WIDTH, HEIGHT))
-                    disp.image(resized_img)
-                    time.sleep(5)            
-                except PIL.UnidentifiedImageError:
-                    print("Bad Link/File")
-               
+#                    try:
+                        img = PIL.Image.open(image_bytes)
+                        resized_img = img.resize((WIDTH, HEIGHT))
+                        disp.image(resized_img)
+                        time.sleep(5)            
+                    except PIL.UnidentifiedImageError:
+                        print("Bad Link/File")
+                    except http.client.RemoteDisconnected:
+                        print("http:client.RemoteDisconnected")
+                    except urllib3.exceptions.ProtocolError:
+                        print("urllib3.exceptions")
+                    except requests.exceptions.ConnectionError:
+                        print("requests.exceptions")
+                    except socket.gaierror:
+                        print("socket.gaierror")
+                    except urllib3.exceptions.NewConnectionError:
+                        print("urllib new connection error")
+                    except urllib3.exceptions.MaxRetryError:
+                        print("urlib max retryerror")
+                    except NameError:
+                        print("name error")
+
+                else: 
+                    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+                    im = Image.new("RGB", (240, 240), "red")
+                    d = ImageDraw.Draw(im)
+#        d.line(((0, 120), (200, 120)), "gray")
+#        d.line(((120, 0), (120, 200)), "gray")
+                    d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+                    d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+                    d.text((120, 120), "You are out", fill="black", anchor="ms", font=font)
+                    d.text((120, 140), "of wifi range", fill="black", anchor="ms", font=font)
+                    d.text((120, 160), "or wifi setup", fill="black", anchor="ms", font=font)
+                    d.text((120, 180), "went wrong.", fill="black", anchor="ms", font=font)
+                    d.text((120, 200), "Move closer to router", fill="black", anchor="ms", font=font)
+                    d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+#        im = im.rotate()
+                    disp.image(im)
+                    print("no internet available")
             
             time.sleep(0.25)
         time.sleep(0.25)
