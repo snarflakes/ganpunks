@@ -186,6 +186,46 @@ def internet(host="8.8.8.8", port=53, timeout=3):
 		print(ex)
 		return False
 
+def art_checkers(im):
+
+    d = ImageDraw.Draw(im)
+    draw = ImageDraw.Draw(im)
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 20)
+
+    draw.rectangle([(0,0),(30,30)], fill=(0,0,0), outline=(255,255,255))
+    draw.rectangle([(30,0),(60,30)], fill=(255,255,255), outline=(0,0,0))
+    draw.rectangle([(60,0),(90,30)], fill=(0,0,0), outline=(255,255,255))
+    draw.rectangle([(90,0),(120,30)], fill=(255,255,255), outline=(0,0,0))
+    draw.rectangle([(120,0),(150,30)], fill=(0,0,0), outline=(255,255,255))
+    draw.rectangle([(150,0),(180,30)], fill=(255,255,255), outline=(0,0,0))
+    draw.rectangle([(180,0),(210,30)], fill=(0,0,0), outline=(255,255,255))
+    draw.rectangle([(210,0),(240,30)], fill=(255,255,255), outline=(0,0,0))
+    disp.image(im)
+    time.sleep(1)
+
+#(80,20) mountains yellow rising
+#(80,40) dumb
+#(yellow 255,255,0)fill
+#(200,100) nice more central point
+
+    draw.polygon(((210,80), (0,30), (30,30)), fill=(0,0,0), outline=(255,255,255))
+    disp.image(im)
+    draw.polygon(((210,80), (30,30), (60,30)), fill=(255,255,255), outline=(255,255,255))
+    disp.image(im)
+    draw.polygon(((210,80), (60,30), (90,30)), fill=(0,0,0), outline=(255,255,255))
+    disp.image(im)
+    draw.polygon(((210,80), (90,30), (120,30)), fill=(255,255,255), outline=(255,255,255))
+    disp.image(im)
+    draw.polygon(((210,80), (120,30), (150,30)), fill=(0,0,0), outline=(255,255,255))
+    disp.image(im)
+    draw.polygon(((210,80), (150,30), (180,30)), fill=(255,255,255), outline=(255,255,255))
+    disp.image(im)
+    draw.polygon(((210,80), (180,30), (210,30)), fill=(0,0,0), outline=(255,255,255))
+    disp.image(im)
+    draw.polygon(((210,80), (210,30), (240,30)), fill=(255,255,255), outline=(255,255,255))
+    disp.image(im)
+    return im,d
+
 def art(im):
     def r():
         r = random.randint(0,255)
@@ -304,20 +344,20 @@ def delete_NFT():
             mywriter.writerow(value)
 # Write.writerows([updatedlist])
         print("File has been updated")
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 30)
-        im = Image.new("RGB", (240, 240), "red")
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 20)
+        im = Image.new("RGB", (240, 240), "black")
         d = ImageDraw.Draw(im)
 #            d.line(((0, 120), (200, 120)), "gray")
 #            d.line(((120, 0), (120, 200)), "gray")
-
-        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
-        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
-        d.text((120, 120), "Deleted NFT", fill="black", anchor="ms", font=font)
-        d.text((120, 140), "They are gone", fill="black", anchor="ms", font=font)
-        d.text((120, 160), "Not forever", fill="black", anchor="ms", font=font)
-        d.text((120, 180), "Just", fill="black", anchor="ms", font=font)
-        d.text((120, 200), "Reload", fill="black", anchor="ms", font=font)
-        d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+        art_checkers(im)
+#        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+#        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+        d.text((120, 120), "Deleted NFT", fill="white", anchor="ms", font=font)
+        d.text((120, 140), "They are gone", fill="white", anchor="ms", font=font)
+        d.text((120, 160), "Not forever", fill="white", anchor="ms", font=font)
+        d.text((120, 180), "Just", fill="white", anchor="ms", font=font)
+        d.text((120, 200), "Reload'em", fill="white", anchor="ms", font=font)
+        d.text((120, 220), "__________________", fill="white", anchor="ms", font=font)
 
 #        im = im.rotate()
         disp.image(im)
@@ -415,9 +455,9 @@ def qr_capture():
     d = ImageDraw.Draw(im)
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
-
-    d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
-    d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+    art(im)
+#    d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
+#    d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
     d.text((120, 120), "Aim 12 inches away", fill="black", anchor="ms", font=font)
     d.text((120, 140), "from QR Codes", fill="black", anchor="ms", font=font)
     d.text((120, 160), "New NFT will flash", fill="black", anchor="ms", font=font)
@@ -455,8 +495,11 @@ def qr_capture():
             qrcodeData = obj.data.decode("utf-8")
 #flash NFT to signal capture, 
 #first go black/stop scanning/process
-            response = requests.get(qrcodeData)
-            image_bytes = io.BytesIO(response.content)
+            try:
+                response = requests.get(qrcodeData)
+                image_bytes = io.BytesIO(response.content)
+            except requests.exceptions.MissingSchema:
+                print("Error, requests.exceptions.missingschema") 
 
 #check for mp4 image file
             try:
@@ -561,9 +604,9 @@ def qr_capture():
             d = ImageDraw.Draw(im)
 #                d.line(((0, 120), (200, 120)), "gray")
 #                d.line(((120, 0), (120, 200)), "gray")
-
-            d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
-            d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+            art(im)
+ #           d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
+ #           d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
             d.text((120, 120), "Ended QRCodes scanning!", fill="black", anchor="ms", font=font)
             d.text((120, 140), "Press either Scroll", fill="black", anchor="ms", font=font)
             d.text((120, 160), "Direction to select", fill="black", anchor="ms", font=font)
@@ -691,11 +734,11 @@ def no_NFT():
             font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
             im = Image.new("RGB", (240, 240), "yellow")
             d = ImageDraw.Draw(im)
-            d.line(((0, 120), (200, 120)), "gray")
-            d.line(((120, 0), (120, 200)), "gray")
-  
-            d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
-            d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+#            d.line(((0, 120), (200, 120)), "gray")
+#            d.line(((120, 0), (120, 200)), "gray")
+            art(im) 
+#            d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
+#            d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
             d.text((120, 120), "Welcome to NFTYdaze. ", fill="black", anchor="ms", font=font)
             d.text((120, 140), "Find an NFT on opensea.io", fill="black", anchor="ms", font=font)
             d.text((120, 160), "(Image only, no GIFS/Videos)", fill="black", anchor="ms", font=font)
@@ -735,6 +778,24 @@ def long_push2():
     print("Reset NFT storage")
     print("in 2 minutes all stored NFT's will be wiped out then device will shut down")
     print("quickly tap shut off button to stop process")
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 20)
+    im = Image.new("RGB", (240, 240), "red")
+    d = ImageDraw.Draw(im)
+#            d.line(((0, 120), (200, 120)), "gray")
+#            d.line(((120, 0), (120, 200)), "gray")
+    art_checkers(im)
+#        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+#        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+    d.text((120, 120), "Delete all NFT", fill="black", anchor="ms", font=font)
+    d.text((120, 140), "They will be ALL gone", fill="black", anchor="ms", font=font)
+    d.text((120, 160), "in 2 minutes", fill="black", anchor="ms", font=font)
+    d.text((120, 180), "Tap Shutdown Button ", fill="black", anchor="ms", font=font)
+    d.text((120, 200), "to Cancel instead", fill="black", anchor="ms", font=font)
+    d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+
+#        im = im.rotate()
+    disp.image(im)
+
     time.sleep(5)
     os.remove('qrcodes.csv')
     time.sleep(0.25)
@@ -776,10 +837,10 @@ def long_push():
 
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
-        art(im)
-        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+        art_checkers(im)
+#        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
 #        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
-        d.text((120, 120), "LONG SlideShow", fill="black", anchor="ms", font=font)
+        d.text((120, 120), "SlideShow", fill="black", anchor="ms", font=font)
         d.text((120, 140), "Mode", fill="black", anchor="ms", font=font)
         d.text((120, 160), "Activated", fill="black", anchor="ms", font=font)
 #        d.text((120, 180), "when captured. Repeat.", fill="black", anchor="ms", font=font)
@@ -868,8 +929,8 @@ def flip_screen():
     d = ImageDraw.Draw(im)
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
-
-    d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+    art_checkers(im)
+#    d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
 #       d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
     d.text((120, 120), "Flip Mode", fill="black", anchor="ms", font=font)
     d.text((120, 140), "Squad:", fill="black", anchor="ms", font=font)
@@ -921,9 +982,9 @@ except Exception:
     d = ImageDraw.Draw(im)
     d.line(((0, 120), (200, 120)), "gray")
     d.line(((120, 0), (120, 200)), "gray")
-
-    d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
-    d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+    art(im)
+#    d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
+#    d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
     d.text((120, 120), "No internet connected", fill="black", anchor="ms", font=font)
     d.text((120, 140), "to fetch NFT images", fill="black", anchor="ms", font=font)
     d.text((120, 160), "Connect your phone", fill="black", anchor="ms", font=font)
@@ -946,9 +1007,9 @@ except Exception:
         font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
         im = Image.new("RGB", (240, 240), "red")
         d = ImageDraw.Draw(im)
-        d.line(((0, 120), (200, 120)), "gray")
-        d.line(((120, 0), (120, 200)), "gray")
-
+#        d.line(((0, 120), (200, 120)), "gray")
+#        d.line(((120, 0), (120, 200)), "gray")
+        art_checkers(im)
         d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
         d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
         d.text((120, 120), "Retried internet, Still", fill="black", anchor="ms", font=font)
