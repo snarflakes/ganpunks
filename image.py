@@ -135,6 +135,7 @@ opened_file = open('qrcodes.csv')
 read_file = reader(opened_file)
 apps_data = list(read_file)
 
+
 def splash_screen():
     print("drawing splash screen")
     picture_1 = Image.open("nftydaze4.jpg")
@@ -345,7 +346,7 @@ def delete_NFT():
 # Write.writerows([updatedlist])
         print("File has been updated")
         font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 20)
-        im = Image.new("RGB", (240, 240), "black")
+        im = Image.new("RGB", (240, 240), "fuchsia")
         d = ImageDraw.Draw(im)
 #            d.line(((0, 120), (200, 120)), "gray")
 #            d.line(((120, 0), (120, 200)), "gray")
@@ -361,6 +362,7 @@ def delete_NFT():
 
 #        im = im.rotate()
         disp.image(im)
+        time.sleep(10)
     if x == 0:
         print("1st nft deleted; restart list")
         x = (len(apps_data) - 1) 
@@ -451,18 +453,18 @@ def qr_capture():
     print("Your QR Gan Punk")
 #Aim at QR codes; new NFT will flash when captured:  display screen Splash
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-    im = Image.new("RGB", (240, 240), "blue")
+    im = Image.new("RGB", (240, 240), "darkturquoise")
     d = ImageDraw.Draw(im)
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
     art(im)
 #    d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
-    d.text((120, 100), "Aim 12 inches away", fill="black", anchor="rs", font=font)
+    d.text((120, 100), "Aim 12 inches away", fill="black", anchor="ms", font=font)
     d.text((120, 120), "from QR Codes", fill="black", anchor="ms", font=font)
     d.text((120, 140), "New NFT will flash", fill="black", anchor="ms", font=font)
     d.text((120, 160), "when captured. Repeat", fill="black", anchor="ms", font=font)
     d.text((120, 180), "for any other QR codes", fill="black", anchor="ms", font=font)
-    d.text((120, 200), "Press Exit Scan when done!", fill="black", anchor="ms", font=font)
+    d.text((120, 200), "Press ExitScan when done!", fill="black", anchor="ms", font=font)
     d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
 
 #        im = im.rotate()
@@ -600,7 +602,7 @@ def qr_capture():
 
 #Splash: ALL Stored:  Resume Selecting Your NFT to display
             font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-            im = Image.new("RGB", (240, 240), "yellow")
+            im = Image.new("RGB", (240, 240), "gold")
             d = ImageDraw.Draw(im)
 #                d.line(((0, 120), (200, 120)), "gray")
 #                d.line(((120, 0), (120, 200)), "gray")
@@ -615,7 +617,7 @@ def qr_capture():
             d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
 #    im = im.rotate(180)
             disp.image(im)
-            time.sleep(0.25)
+            time.sleep(2)
 #set carousel at newest added nft: display new one here too?
             opened_file = open('qrcodes.csv')
             read_file = reader(opened_file)
@@ -642,7 +644,27 @@ def scroll_NFT():
         opened_file = open('qrcodes.csv')
         read_file = reader(opened_file)
         apps_data = list(read_file)
-        onelink = apps_data[x][1]
+
+        try:
+            onelink = apps_data[x][1]
+
+        except IndexError:
+            print("Empty qrcode data")
+            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+            im = Image.new("RGB", (240, 240), "red")
+            d = ImageDraw.Draw(im)
+#            d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+            d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+            d.text((120, 120), "No QRcodes", fill="black", anchor="ms", font=font)
+            d.text((120, 140), "are loaded yet", fill="black", anchor="ms", font=font)
+            d.text((120, 160), "Shutting Down", fill="black", anchor="ms", font=font)
+            d.text((120, 180), "Turn on unit again", fill="black", anchor="ms", font=font)
+            d.text((120, 200), "when you are ready", fill="black", anchor="ms", font=font)
+            d.text((120, 220), "___to_____scan____", fill="black", anchor="ms", font=font)
+            disp.image(im)
+            time.sleep(20)
+            shut_down()
+
         print(len(apps_data))
 
 #display next NFT in order of CSV
@@ -663,7 +685,7 @@ def scroll_NFT():
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
 
-        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+#        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
         d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
         d.text((120, 120), "You are out", fill="black", anchor="ms", font=font)
         d.text((120, 140), "of wifi range", fill="black", anchor="ms", font=font)
@@ -689,7 +711,26 @@ def reverse_scroll_NFT():
         read_file = reader(opened_file)
         apps_data = list(read_file)
         nftlinks = []
-        onelink = apps_data[x][1]
+        try:
+            onelink = apps_data[x][1]
+
+        except IndexError:
+            print("Empty qrcode data")
+            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+            im = Image.new("RGB", (240, 240), "red")
+            d = ImageDraw.Draw(im)
+#            d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+            d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+            d.text((120, 120), "No QRcodes", fill="black", anchor="ms", font=font)
+            d.text((120, 140), "are loaded yet", fill="black", anchor="ms", font=font)
+            d.text((120, 160), "Shutting Down", fill="black", anchor="ms", font=font)
+            d.text((120, 180), "Turn on unit again", fill="black", anchor="ms", font=font)
+            d.text((120, 200), "when you are ready", fill="black", anchor="ms", font=font)
+            d.text((120, 220), "___to_____scan____", fill="black", anchor="ms", font=font)
+            disp.image(im)
+            time.sleep(20)
+            shut_down()
+
         print(len(apps_data))
 
 #display next NFT in reverse order of CSV
@@ -711,7 +752,7 @@ def reverse_scroll_NFT():
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
 
-        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+#        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
         d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
         d.text((120, 120), "You are out", fill="black", anchor="ms", font=font)
         d.text((120, 140), "of wifi range", fill="black", anchor="ms", font=font)
@@ -732,19 +773,19 @@ def no_NFT():
         print("No NFT's stored")
         if internet():
             font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-            im = Image.new("RGB", (240, 240), "yellow")
+            im = Image.new("RGB", (240, 240), "antiquewhite")
             d = ImageDraw.Draw(im)
 #            d.line(((0, 120), (200, 120)), "gray")
 #            d.line(((120, 0), (120, 200)), "gray")
             art(im) 
-#            d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
-#            d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
-            d.text((120, 120), "Welcome to NFTYdaze. ", fill="black", anchor="ms", font=font)
-            d.text((120, 140), "Find an NFT on opensea.io", fill="black", anchor="ms", font=font)
-            d.text((120, 160), "(Image only, no GIFS/Videos)", fill="black", anchor="ms", font=font)
-            d.text((120, 180), "QRcode scanning to start in 30s", fill="black", anchor="ms", font=font)
-            d.text((120, 200), "Once NFT flashes, Press Save to exit", fill="black", anchor="ms", font=font)
-            d.text((120, 220), "If still no internet or scanning, shutting down", fill="black", anchor="ms", font=font)
+            d.text((120, 100), ".Welcome to NFTYdaze.", fill="black", anchor="ms", font=font)
+            d.text((120, 120), "Find an NFT on opensea.io", fill="black", anchor="ms", font=font)
+            d.text((120, 140), "Images, no GIFS/Videos.", fill="black", anchor="ms", font=font)
+            d.text((120, 160), "QRcode Scanning in 30s", fill="black", anchor="ms", font=font)
+            d.text((120, 180), "Once NFT stops flashing", fill="black", anchor="ms", font=font)
+            d.text((120, 200), "press ExitScan direction", fill="black", anchor="ms", font=font)
+            d.text((120, 220), "If still no internet or", fill="black", anchor="ms", font=font)
+            d.text((120, 240), "QRcode, unit shuts down", fill="black", anchor="ms", font=font)
 
 #       im = im.rotate()
             disp.image(im)
@@ -776,8 +817,8 @@ def push_button2():
 
 def long_push2():
     print("Reset NFT storage")
-    print("in 2 minutes all stored NFT's will be wiped out then device will shut down")
-    print("quickly tap shut off button to stop process")
+    print("in 1 minutes all stored NFT's will be wiped out then device will restart")
+    print("quickly switch power off button to stop process")
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 20)
     im = Image.new("RGB", (240, 240), "red")
     d = ImageDraw.Draw(im)
@@ -786,20 +827,18 @@ def long_push2():
     art_checkers(im)
 #        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
 #        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
-    d.text((120, 120), "Delete all NFT", fill="black", anchor="ms", font=font)
-    d.text((120, 140), "They will be ALL gone", fill="black", anchor="ms", font=font)
-    d.text((120, 160), "in 2 minutes", fill="black", anchor="ms", font=font)
-    d.text((120, 180), "Tap Shutdown Button ", fill="black", anchor="ms", font=font)
-    d.text((120, 200), "to Cancel instead", fill="black", anchor="ms", font=font)
-    d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+    d.text((120, 120), "Delete all NFTs", fill="black", anchor="ms", font=font)
+    d.text((120, 140), "They will ALL be gone", fill="black", anchor="ms", font=font)
+    d.text((120, 160), "in 1 minute and", fill="black", anchor="ms", font=font)
+    d.text((120, 180), "device will Reset.", fill="black", anchor="ms", font=font)
+    d.text((120, 200), "Flip Power Switch", fill="black", anchor="ms", font=font)
+    d.text((120, 220), "NOW if done in Error", fill="black", anchor="ms", font=font)
 
-#        im = im.rotate()
     disp.image(im)
-
-    time.sleep(5)
+    time.sleep(20)
     os.remove('qrcodes.csv')
     time.sleep(0.25)
-    shut_down()
+    os.system("sudo reboot now")
 
 def push_button():
     start_time=time.time()
@@ -899,7 +938,7 @@ def long_push():
                     d = ImageDraw.Draw(im)
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
-                    d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+#                    d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
                     d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
                     d.text((120, 120), "You are out", fill="black", anchor="ms", font=font)
                     d.text((120, 140), "of wifi range", fill="black", anchor="ms", font=font)
@@ -963,34 +1002,28 @@ buttonC = Button(13)
 #start with splash
 splash_screen()
 
-#check if user needs onboarding/load NFTs
-no_NFT()
-
-# Added default most recently added NFT as base NFT displayed (can increase splash screen time): rest of onboarding below functions
-x = (len(apps_data) - 1)
-onelink = apps_data[x][1]
 
 #check internet connection
-try:
-    response = requests.get(onelink)
+if internet() == False:
+#    response = requests.get(onelink)
 
-except Exception:
+#except Exception:
     print("can't connect to internet:socket gaierror")
 
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
     im = Image.new("RGB", (240, 240), "blue")
     d = ImageDraw.Draw(im)
-    d.line(((0, 120), (200, 120)), "gray")
-    d.line(((120, 0), (120, 200)), "gray")
+#    d.line(((0, 120), (200, 120)), "gray")
+#    d.line(((120, 0), (120, 200)), "gray")
     art(im)
 #    d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
 #    d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
     d.text((120, 120), "No internet connected", fill="black", anchor="ms", font=font)
     d.text((120, 140), "to fetch NFT images", fill="black", anchor="ms", font=font)
-    d.text((120, 160), "Connect your phone", fill="black", anchor="ms", font=font)
-    d.text((120, 180), "wifi to 'HomeBridge'", fill="black", anchor="ms", font=font)
-    d.text((120, 200), "Iphone to Iphone Hotspots", fill="black", anchor="ms", font=font)
-    d.text((120, 220), "don't work:shutting down in 2mins", fill="black", anchor="ms", font=font)
+    d.text((120, 160), "Connect wifi on your", fill="black", anchor="ms", font=font)
+    d.text((120, 180), "phone to 'HomeBridge'", fill="black", anchor="ms", font=font)
+    d.text((120, 200), "shutting down in 2", fill="black", anchor="ms", font=font)
+    d.text((120, 220), "minutes", fill="black", anchor="ms", font=font)
 
 #       im = im.rotate()
     disp.image(im)
@@ -998,10 +1031,9 @@ except Exception:
 
     print("Re-Connect:Auto Shutting Down in 2 minutes")
 
-    try:
-        response = requests.get(onelink)
-
-    except Exception:
+    if internet() == False:
+#        response = requests.get(onelink)
+#    except Exception:
         print("retry connect internet:can't connect to internet:socket gaierror")
 
         font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
@@ -1010,7 +1042,7 @@ except Exception:
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
         art_checkers(im)
-        d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
+#        d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
         d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
         d.text((120, 120), "Retried internet, Still", fill="black", anchor="ms", font=font)
         d.text((120, 140), "No internet connected", fill="black", anchor="ms", font=font)
@@ -1039,7 +1071,35 @@ except Exception:
         os.system("sudo shutdown -h now")
         while 1:
             time.sleep(1)
-    
+
+#check if user needs onboarding/load NFTs
+no_NFT()
+
+# Added default most recently added NFT as base NFT displayed (can increase splash screen time): rest of onboarding below functions
+x = (len(apps_data) - 1)
+
+try:
+    onelink = apps_data[x][1]
+
+except IndexError:
+    print("Empty qrcode data")
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+    im = Image.new("RGB", (240, 240), "red")
+    d = ImageDraw.Draw(im)
+#            d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+    d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+    d.text((120, 120), "No QRcodes", fill="black", anchor="ms", font=font)
+    d.text((120, 140), "are loaded yet", fill="black", anchor="ms", font=font)
+    d.text((120, 160), "Shutting Down", fill="black", anchor="ms", font=font)
+    d.text((120, 180), "Turn on unit again", fill="black", anchor="ms", font=font)
+    d.text((120, 200), "when you are ready", fill="black", anchor="ms", font=font)
+    d.text((120, 220), "to scan a QRcode", fill="black", anchor="ms", font=font)
+    disp.image(im)
+    time.sleep(20)
+    shut_down()
+
+response = requests.get(onelink)
+ 
 image_bytes = io.BytesIO(response.content)
 #check for bad link
 try:
