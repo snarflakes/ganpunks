@@ -1,3 +1,4 @@
+seconds = 120
 #All Code Copyrighted and patent pending to Snarflakes. 
 #No unauthorized use of code allowed
 
@@ -362,88 +363,15 @@ def delete_NFT():
 
 #        im = im.rotate()
         disp.image(im)
-        time.sleep(10)
+        time.sleep(6)
     if x == 0:
         print("1st nft deleted; restart list")
         x = (len(apps_data) - 1) 
         #force onboarding
         no_NFT()
-        
     time.sleep(0.25)
 
-#slideshow_on = False
-def slideshow_mode():
-#    global slideshow_on
-
-    global apps_data
-    print("SlideShow Mode")
-#    if slideshow_on:
-    if internet():
-        
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 30)
-        im = Image.new("RGB", (240, 240), "pink")
-        d = ImageDraw.Draw(im)
-#        d.line(((0, 120), (200, 120)), "gray")
-#        d.line(((120, 0), (120, 200)), "gray")
-        art()
-        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
-#        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
-        d.text((120, 120), "SlideShow", fill="black", anchor="ms", font=font)
-        d.text((120, 140), "Mode", fill="black", anchor="ms", font=font)
-        d.text((120, 160), "Activated", fill="black", anchor="ms", font=font)
-#        d.text((120, 180), "when captured. Repeat.", fill="black", anchor="ms", font=font)
-#        d.text((120, 200), "Press Down when done!", fill="black", anchor="ms", font=font)
-#        d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
-
-#        im = im.rotate()
-        disp.image(im)
-        time.sleep(2)
-#        for i in range(sys.maxsize**10): 
-#        switch = False
-#        for _ in range(sys.maxsize**10):
-#            t1 = threading.Thread(target=do_something)
-#            t2 = threading.Thread(target=do_somethingstop)
-#            t2.start()
-#            t1.start()
-
-#            t1.join()
-#            t2.join()
-        for _ in range(3):
-            for value in apps_data:
-#            t1.start()
-#            t2.start()
-                print(value[1])
-                onelink = value[1]
-                response = requests.get(onelink)
-                image_bytes = io.BytesIO(response.content)
-#scan for corrupted link
-                try:
-                    img = PIL.Image.open(image_bytes)
-                    resized_img = img.resize((WIDTH, HEIGHT))
-                    disp.image(resized_img)
-                    time.sleep(5)            
-                except PIL.UnidentifiedImageError:
-                    print("Bad Link/File")
-               
-            
-            time.sleep(0.25)
-        time.sleep(0.25)
-    else:
-        print("no internet available")
-
-# slideshow_on = not slideshow_on
-#                b.start()
-
-#            if not button_D.value:
-#                print("stop slideshow")
-#                a.stop()
-#                break
-
- 
-             #how to stop loop? if any other button is pressed?
-
 camera_on = False
-
 def qr_capture():
     global apps_data
     global x
@@ -710,7 +638,7 @@ def reverse_scroll_NFT():
         opened_file = open('qrcodes.csv')
         read_file = reader(opened_file)
         apps_data = list(read_file)
-        nftlinks = []
+#        nftlinks = []
         try:
             onelink = apps_data[x][1]
 
@@ -865,8 +793,9 @@ def push_button():
         long_push()
 
 def long_push():
+
     global apps_data
-    print("LONG SlideShow Mode")
+    print("SlideShow Mode")
 #    if slideshow_on:
     if internet():
         
@@ -882,7 +811,8 @@ def long_push():
         d.text((120, 120), "SlideShow", fill="black", anchor="ms", font=font)
         d.text((120, 140), "Mode", fill="black", anchor="ms", font=font)
         d.text((120, 160), "Activated", fill="black", anchor="ms", font=font)
-#        d.text((120, 180), "when captured. Repeat.", fill="black", anchor="ms", font=font)
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 10)
+        d.text((120, 180), "Lasting: " + str(seconds) + " seconds", fill="black", anchor="ms", font=font)
 #        d.text((120, 200), "Press Down when done!", fill="black", anchor="ms", font=font)
 #        d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
 
@@ -899,10 +829,18 @@ def long_push():
 
 #            t1.join()
 #            t2.join()
-        for _ in range(3):
+        start_time = time.time()
+        breakoutflag = False
+        for _ in range(100000):
             for value in apps_data:
 #            t1.start()
 #            t2.start()
+                current_time = time.time()
+                elapsed_time = current_time - start_time
+                if elapsed_time > seconds:
+                    print("Finished iterating in : " + str(int(elapsed_time)) + " seconds")
+                    breakoutflag = True
+                    break
                 print(value[1])
                 onelink = value[1]
                 if internet():
@@ -951,7 +889,73 @@ def long_push():
                     print("no internet available")
             
             time.sleep(0.25)
+            if breakoutflag:
+#             add display x NFT to reset visual accurately
+#                global apps_data
+#                global x
+#reverse direction scrolling
+                if internet():
+                    print("reset ordering")
+                    opened_file = open('qrcodes.csv')
+                    read_file = reader(opened_file)
+                    apps_data = list(read_file)
+
+                    try:
+                        onelink = apps_data[x][1]
+
+                    except IndexError:
+                        print("Empty qrcode data")
+                        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+                        im = Image.new("RGB", (240, 240), "red")
+                        d = ImageDraw.Draw(im)
+#            d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+                        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+                        d.text((120, 120), "No QRcodes", fill="black", anchor="ms", font=font)
+                        d.text((120, 140), "are loaded yet", fill="black", anchor="ms", font=font)
+                        d.text((120, 160), "Shutting Down", fill="black", anchor="ms", font=font)
+                        d.text((120, 180), "Turn on unit again", fill="black", anchor="ms", font=font)
+                        d.text((120, 200), "when you are ready", fill="black", anchor="ms", font=font)
+                        d.text((120, 220), "___to_____scan____", fill="black", anchor="ms", font=font)
+                        disp.image(im)
+                        time.sleep(20)
+                        shut_down()
+
+                    print(len(apps_data))
+                    response = requests.get(onelink)
+                    image_bytes = io.BytesIO(response.content)
+#screen for bad link
+                    try:
+                        img = PIL.Image.open(image_bytes)
+                        resized_img = img.resize((WIDTH, HEIGHT))
+                        disp.image(resized_img)
+                        time.sleep(0.25)            
+                    except PIL.UnidentifiedImageError:
+                        print("Bad Link/File")
+
+                else: 
+                    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+                    im = Image.new("RGB", (240, 240), "red")
+                    d = ImageDraw.Draw(im)
+#        d.line(((0, 120), (200, 120)), "gray")
+#        d.line(((120, 0), (120, 200)), "gray")
+
+#        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+                    d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+                    d.text((120, 120), "You are out", fill="black", anchor="ms", font=font)
+                    d.text((120, 140), "of wifi range", fill="black", anchor="ms", font=font)
+                    d.text((120, 160), "or wifi setup", fill="black", anchor="ms", font=font)
+                    d.text((120, 180), "went wrong.", fill="black", anchor="ms", font=font)
+                    d.text((120, 200), "Move closer to router", fill="black", anchor="ms", font=font)
+                    d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+                    disp.image(im)
+                    print("no internet available")
+
+                break
+#            if elapsed_time > seconds:
+#                print("Finished iterating in : " + str(int(elapsed_time)) + " seconds")
+#                break
         time.sleep(0.25)
+
     else:
         print("no internet available")
 
@@ -1117,9 +1121,9 @@ Pick your Gan Punk
 
 try: 
     button1.when_pressed = shut_down
-#    button2.when_pressed = delete_NFT
+#delete 1 nft/delete all nfts
     button2.when_pressed = push_button2
-#    button3.when_pressed = slideshow_mode
+#slideshow/scroll/safe button
     button3.when_pressed = push_button
     buttonL.when_pressed = flip_screen
     buttonC.when_pressed = qr_capture
