@@ -105,7 +105,7 @@ class AnimatedGif:
     def preload(self):
 #        image = Image.open(self._gif_files[self._index])
 
-        response = requests.get("https://lh3.googleusercontent.com/KwRMYR1tmznmBmh6MWPuzdUacRwP-7ZfVz8RpX5VPJWBeBK8652NioEdvTbuofb_hS46-Q12f9yXn1gDBq6Ups92B09cC9anTv3X=s0")
+        response = requests.get("https://cdn.discordapp.com/attachments/860361939551780934/860593940762722354/1130_-_Fixed.gif")
         image_bytes = io.BytesIO(response.content)
         image = PIL.Image.open(image_bytes)
 #        print("Loading {}...".format(self._gif_files[self._index]))
