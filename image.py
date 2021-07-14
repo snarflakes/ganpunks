@@ -406,8 +406,8 @@ def delete_NFT():
         x = (len(apps_data) - 1) 
         #force onboarding
         no_NFT()
-    else:
-        x -= 1
+#    else:
+#        x -= 1
     time.sleep(0.25)
 
 camera_on = False
@@ -613,13 +613,14 @@ def scroll_NFT():
     if internet():
         print("Your Saved Gan Punks")
         x += 1
-        if x > (len(apps_data) - 1):
-            x = 0
+        
         opened_file = open('qrcodes.csv')
         read_file = reader(opened_file)
         apps_data = list(read_file)
-
-        try:
+        if x > (len(apps_data) - 1):
+            x = 0
+        
+	try:
             onelink = apps_data[x][1]
 
         except IndexError:
