@@ -596,7 +596,7 @@ def qr_capture():
             opened_file = open('qrcodes.csv')
             read_file = reader(opened_file)
             apps_data = list(read_file)
-            x = (len(apps_data) - 1)
+            x = (len(apps_data) - 2)
             print("Saved your punk")
             break
 #set condition if no qrcode Data
