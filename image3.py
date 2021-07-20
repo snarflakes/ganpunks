@@ -863,6 +863,7 @@ def long_push():
                         response = requests.get(onelink)
                         image_bytes = io.BytesIO(response.content)
 #scan for corrupted link
+#                    try:
                         img = PIL.Image.open(image_bytes)
                         resized_img = img.resize((WIDTH, HEIGHT))
                         disp.image(resized_img)
@@ -906,6 +907,9 @@ def long_push():
             time.sleep(0.25)
             if breakoutflag:
 #             add display x NFT to reset visual accurately
+#                global apps_data
+#                global x
+#reverse direction scrolling
                 if internet():
                     print("reset ordering")
                     opened_file = open('qrcodes.csv')
@@ -964,6 +968,9 @@ def long_push():
                     print("no internet available")
 
                 break
+#            if elapsed_time > seconds:
+#                print("Finished iterating in : " + str(int(elapsed_time)) + " seconds")
+#                break
         time.sleep(0.25)
 
     else:
