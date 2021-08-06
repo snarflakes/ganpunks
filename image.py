@@ -1,5 +1,5 @@
 #slideshow settings
-seconds = 3600
+seconds = 43600
 delay = 5
 #All Code Copyrighted and patent pending to Snarflakes and NFTYdaze. 
 #No unauthorized use of code allowed
