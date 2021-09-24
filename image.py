@@ -19,6 +19,23 @@ from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
+############
+import qrcode
+
+#qr = qrcode.QRCode()
+
+#qr.add_data('http://google.com')
+#qr.make()
+#imgrender = qr.make_image(fill_color="black", back_color="#FAF9F6")
+
+
+#    imgrender2 = imgrender.resize((WIDTH, HEIGHT))
+#    disp.image(imgrender2)
+
+
+
+
+
 #audio button code
 import subprocess
 import board
@@ -362,7 +379,7 @@ def delete_NFT():
         print("1st nft deleted; restart list")
         x = (len(apps_data) - 1) 
         #force onboarding
-        no_NFT()
+        ##no_NFT()
 #    else:
 #        x -= 1
     time.sleep(0.25)
@@ -599,14 +616,26 @@ def scroll_NFT():
 
         print(len(apps_data))
 
+####qr code displayer
+        qr = qrcode.QRCode()
+        print(onelink)
+        qr.add_data(onelink)
+        qr.make()
+        imgrender = qr.make_image(fill_color="black", back_color="#FAF9F6")
+        imgrender2 = imgrender.resize((WIDTH, HEIGHT))
+
 #display next NFT in order of CSV
-        response = requests.get(onelink)
-        image_bytes = io.BytesIO(response.content)
+##        response = requests.get(onelink)
+##        image_bytes = io.BytesIO(response.content)
+
 #check for bad link
         try:
-            img = PIL.Image.open(image_bytes)
-            resized_img = img.resize((WIDTH, HEIGHT))
-            disp.image(resized_img)
+##            img = PIL.Image.open(image_bytes)
+##            resized_img = img.resize((WIDTH, HEIGHT))
+##            disp.image(resized_img)
+
+            disp.image(imgrender2)
+
             time.sleep(0.25)            
         except PIL.UnidentifiedImageError:
             print("Bad Link/File")
@@ -665,14 +694,32 @@ def reverse_scroll_NFT():
 
         print(len(apps_data))
 
+####qr code displayer
+        qr = qrcode.QRCode()
+        print(onelink)
+        qr.add_data(onelink)
+        qr.make()
+        imgrender = qr.make_image(fill_color="black", back_color="#FAF9F6")
+        imgrender2 = imgrender.resize((WIDTH, HEIGHT))
+#    disp.image(imgrender2)
+
+
 #display next NFT in reverse order of CSV
-        response = requests.get(onelink)
-        image_bytes = io.BytesIO(response.content)
+##        response = requests.get(onelink)
+        
+##        image_bytes = io.BytesIO(response.content)
+
+
+
+
 #screen for bad link
         try:
-            img = PIL.Image.open(image_bytes)
-            resized_img = img.resize((WIDTH, HEIGHT))
-            disp.image(resized_img)
+#            img = PIL.Image.open(image_bytes)
+#            resized_img = img.resize((WIDTH, HEIGHT))
+#            disp.image(resized_img)
+
+            disp.image(imgrender2)
+
             time.sleep(0.25)            
         except PIL.UnidentifiedImageError:
             print("Bad Link/File")
@@ -794,8 +841,8 @@ def push_button():
 #        print("held for 2 to 10 seconds")
 
     else:
-        long_push()
-
+##        long_push()
+        delete_NFT()
 def long_push():
 
     global apps_data
@@ -1087,44 +1134,44 @@ if internet() == False:
             time.sleep(1)
 
 #check if user needs onboarding/load NFTs
-no_NFT()
+#no_NFT()
 
 # Added default most recently added NFT as base NFT displayed (can increase splash screen time): rest of onboarding below functions
 x = (len(apps_data) - 1)
 
-try:
-    onelink = apps_data[x][1]
+#try:
+#    onelink = apps_data[x][1]
 
-except IndexError:
-    print("Empty qrcode data")
-    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-    im = Image.new("RGB", (240, 240), "red")
-    d = ImageDraw.Draw(im)
-    art_checkers(im)
+#except IndexError:
+#    print("Empty qrcode data")
+#    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+#    im = Image.new("RGB", (240, 240), "red")
+#    d = ImageDraw.Draw(im)
+#    art_checkers(im)
 
 #            d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
-    d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
-    d.text((120, 120), "No QRcodes", fill="black", anchor="ms", font=font)
-    d.text((120, 140), "are loaded yet", fill="black", anchor="ms", font=font)
-    d.text((120, 160), "Shutting Down", fill="black", anchor="ms", font=font)
-    d.text((120, 180), "Turn on unit again", fill="black", anchor="ms", font=font)
-    d.text((120, 200), "when you are ready", fill="black", anchor="ms", font=font)
-    d.text((120, 220), "to scan a QRcode", fill="black", anchor="ms", font=font)
-    disp.image(im)
-    time.sleep(20)
-    shut_down()
+#    d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+#    d.text((120, 120), "No QRcodes", fill="black", anchor="ms", font=font)
+#    d.text((120, 140), "are loaded yet", fill="black", anchor="ms", font=font)
+#    d.text((120, 160), "Shutting Down", fill="black", anchor="ms", font=font)
+#    d.text((120, 180), "Turn on unit again", fill="black", anchor="ms", font=font)
+#    d.text((120, 200), "when you are ready", fill="black", anchor="ms", font=font)
+#    d.text((120, 220), "to scan a QRcode", fill="black", anchor="ms", font=font)
+#    disp.image(im)
+#    time.sleep(20)
+#    shut_down()
 
-response = requests.get(onelink)
+#response = requests.get(onelink)
  
-image_bytes = io.BytesIO(response.content)
+#image_bytes = io.BytesIO(response.content)
 #check for bad link
-try:
-    img = PIL.Image.open(image_bytes)
-    resized_img = img.resize((WIDTH, HEIGHT))
-    disp.image(resized_img)
-    time.sleep(0.25)            
-except PIL.UnidentifiedImageError:
-    print("Bad Link/File")
+#try:
+#    img = PIL.Image.open(image_bytes)
+#    resized_img = img.resize((WIDTH, HEIGHT))
+#    disp.image(resized_img)
+#    time.sleep(0.25)            
+#except PIL.UnidentifiedImageError:
+#    print("Bad Link/File")
 
 
 print("""

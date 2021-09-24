@@ -1,0 +1,9 @@
+import pyqrcode
+#url = pyqrcode.create('http://www.nftydaze.com')
+#url.svg('uca-url.svg', scale=8)
+#print(url.terminal(quiet_zone=1))
+
+
+big_code = pyqrcode.create('0987654321', error='L', version=27, mode='binary')
+
+big_code.png('code.png', scale=1, module_color=(0,0,0), background=(250, 249, 246, 250))
