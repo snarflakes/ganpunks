@@ -82,7 +82,7 @@ print(example_d[0])
 
 #construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-o", "--output", type=str, default="qrcodes.csv", help="path to output CSV file containing qrcode data")
+ap.add_argument("-o", "--output", type=str, default="/boot/qrcodes.csv", help="path to output CSV file containing qrcode data")
 args = vars(ap.parse_args())
 
 
@@ -121,7 +121,7 @@ image.py - Display an NFT image weblink on the IPS LCD.
 
 """)
 
-opened_file = open('qrcodes.csv')
+opened_file = open('/boot/qrcodes.csv')
 read_file = reader(opened_file)
 apps_data = list(read_file)
 
@@ -337,7 +337,7 @@ def delete_NFT():
     removenft = x 
     updatedlist=[]
 
-    with open("qrcodes.csv",newline="") as f:
+    with open("/boot/qrcodes.csv",newline="") as f:
         print(type(f))
         read_file = reader(f)
         mylist = list(read_file)
@@ -350,7 +350,7 @@ def delete_NFT():
         print(updatedlist)
 #            print(updatedlist[0][1])
 #            print(type(updatedlist[0][1]))
-    with open("qrcodes.csv","w",newline="") as f:
+    with open("/boot/qrcodes.csv","w",newline="") as f:
         mywriter=csv.writer(f)
            
         for value in updatedlist:
@@ -438,60 +438,62 @@ def qr_capture():
             qrcodeData = obj.data.decode("utf-8")
 #flash NFT to signal capture, 
 #first go black/stop scanning/process
-            try:
-                response = requests.get(qrcodeData)
-                image_bytes = io.BytesIO(response.content)
-            except requests.exceptions.MissingSchema:
-                print("Error, requests.exceptions.missingschema") 
+            if internet():
+                print("Internet found")
+                try:
+                    response = requests.get(qrcodeData)
+                    image_bytes = io.BytesIO(response.content)
+                except requests.exceptions.MissingSchema:
+                    print("Error, requests.exceptions.missingschema") 
 
 #check for mp4 image file
-            try:
-                img = PIL.Image.open(image_bytes)
-            except PIL.UnidentifiedImageError:
-                print("MPEG scan attempted")
-                font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-                im = Image.new("RGB", (240, 240), "red")
-                d = ImageDraw.Draw(im)
+                try:
+                    img = PIL.Image.open(image_bytes)
+                except PIL.UnidentifiedImageError:
+                    print("MPEG scan attempted")
+                    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+                    im = Image.new("RGB", (240, 240), "red")
+                    d = ImageDraw.Draw(im)
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
-                art_checkers_fast(im)
+                    art_checkers_fast(im)
 #                d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
-                d.text((120, 100), "DON'T do that", fill="black", anchor="ms", font=font)
-                d.text((120, 120), "NO MPEGS/VIDEOS", fill="black", anchor="ms", font=font)
-                d.text((120, 140), "on this model", fill="black", anchor="ms", font=font)
-                d.text((120, 160), "Press Exit Scanning", fill="black", anchor="ms", font=font)
-                d.text((120, 180), "Direction and", fill="black", anchor="ms", font=font)
-                d.text((120, 200), "Start over again", fill="black", anchor="ms", font=font)
-                d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+                    d.text((120, 100), "DON'T do that", fill="black", anchor="ms", font=font)
+                    d.text((120, 120), "NO MPEGS/VIDEOS", fill="black", anchor="ms", font=font)
+                    d.text((120, 140), "on this model", fill="black", anchor="ms", font=font)
+                    d.text((120, 160), "Press Exit Scanning", fill="black", anchor="ms", font=font)
+                    d.text((120, 180), "Direction and", fill="black", anchor="ms", font=font)
+                    d.text((120, 200), "Start over again", fill="black", anchor="ms", font=font)
+                    d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
 #        im = im.rotate()
-                disp.image(im)
-                time.sleep(2)
-                break
+                    disp.image(im)
+                    time.sleep(2)
+                    break
 
 #check size of image 
-            imageload = sys.getsizeof(img.tobytes())
-            print("img size in memory in bytes: ", imageload)
-            if imageload >36000000:
-                print("close but too big")
-                time.sleep(1)
-                font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-                im = Image.new("RGB", (240, 240), "red")
-                d = ImageDraw.Draw(im)
+                imageload = sys.getsizeof(img.tobytes())
+                print("img size in memory in bytes: ", imageload)
+                if imageload >36000000:
+                    print("close but too big")
+                    time.sleep(1)
+                    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+                    im = Image.new("RGB", (240, 240), "red")
+                    d = ImageDraw.Draw(im)
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
-                art_checkers_fast(im)
+                    art_checkers_fast(im)
 #                d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
-                d.text((120, 100), "DON'T do that", fill="black", anchor="ms", font=font)
-                d.text((120, 120), "again", fill="black", anchor="ms", font=font)
-                d.text((120, 140), "that NFT image file is", fill="black", anchor="ms", font=font)
-                d.text((120, 160), "wayyy too big", fill="black", anchor="ms", font=font)
-                d.text((120, 180), "Press Exit Scanning", fill="black", anchor="ms", font=font)
-                d.text((120, 200), "And start over!", fill="black", anchor="ms", font=font)
-                d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+                    d.text((120, 100), "DON'T do that", fill="black", anchor="ms", font=font)
+                    d.text((120, 120), "again", fill="black", anchor="ms", font=font)
+                    d.text((120, 140), "that NFT image file is", fill="black", anchor="ms", font=font)
+                    d.text((120, 160), "wayyy too big", fill="black", anchor="ms", font=font)
+                    d.text((120, 180), "Press Exit Scanning", fill="black", anchor="ms", font=font)
+                    d.text((120, 200), "And start over!", fill="black", anchor="ms", font=font)
+                    d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
 #        im = im.rotate()
-                disp.image(im)
-                time.sleep(2)
-                break
+                    disp.image(im)
+                    time.sleep(2)
+                    break
 #                if imageload >36000000:
 #                    raise stopIteration
 
@@ -499,52 +501,61 @@ def qr_capture():
 #                print("close but too big")
 #                break
             
-            resized_img = img.resize((WIDTH, HEIGHT))
-            try:
-                disp.image(resized_img)
-            except ValueError:
-                print(resized_img.mode)
-                resized_img = resized_img.convert('RGB')
-                disp.image(resized_img)
-                time.sleep(2)
-                print("GIF scan attempted")
-                font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-                im = Image.new("RGB", (240, 240), "red")
-                d = ImageDraw.Draw(im)
+                resized_img = img.resize((WIDTH, HEIGHT))
+                try:
+                    disp.image(resized_img)
+                except ValueError:
+                    print(resized_img.mode)
+                    resized_img = resized_img.convert('RGB')
+                    disp.image(resized_img)
+                    time.sleep(2)
+                    print("GIF scan attempted")
+                    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+                    im = Image.new("RGB", (240, 240), "red")
+                    d = ImageDraw.Draw(im)
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
-                art_checkers_fast(im)
+                    art_checkers_fast(im)
 #                d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
-                d.text((120, 100), "DON'T do that", fill="black", anchor="ms", font=font)
-                d.text((120, 120), "No GIFS, or it's", fill="black", anchor="ms", font=font)
-                d.text((120, 140), "a file extension", fill="black", anchor="ms", font=font)
-                d.text((120, 160), "issue. Press Exit", fill="black", anchor="ms", font=font)
-                d.text((120, 180), "Scanning Direction", fill="black", anchor="ms", font=font)
-                d.text((120, 200), "And Start over again", fill="black", anchor="ms", font=font)
-                d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+                    d.text((120, 100), "DON'T do that", fill="black", anchor="ms", font=font)
+                    d.text((120, 120), "No GIFS, or it's", fill="black", anchor="ms", font=font)
+                    d.text((120, 140), "a file extension", fill="black", anchor="ms", font=font)
+                    d.text((120, 160), "issue. Press Exit", fill="black", anchor="ms", font=font)
+                    d.text((120, 180), "Scanning Direction", fill="black", anchor="ms", font=font)
+                    d.text((120, 200), "And Start over again", fill="black", anchor="ms", font=font)
+                    d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
 #        im = im.rotate()
-                disp.image(im)
-                time.sleep(2)
-                break
-            time.sleep(0.50)
+                    disp.image(im)
+                    time.sleep(2)
+                    break
+                time.sleep(0.50)
 #Go black
-            print("QRCode scanned to Display Screen")
+                print("QRCode scanned to Display Screen")
 #	clear screen to black ********Add Saved in Ascii? "press joystick down to stop scanning QRcodes?"
 #                disp.begin()
-            img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
-            draw = ImageDraw.Draw(img)
-            disp.image(img)
-            time.sleep(0.25)
+                img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
+                draw = ImageDraw.Draw(img)
+                disp.image(img)
+                time.sleep(0.25)
 ## Add except if trying to scan  marketplace, not pure image data 
 ## clean or better interpret , and : characters in web links
 ## Add except if no qrcode was scanned
 
                 #if qrcode text is currently not in our csv file, write timestampe and
                 #qrcode to disk and update the set
-            if qrcodeData not in found:
-                csv2.write("{},{}\n".format(datetime.datetime.now(), qrcodeData))
-                csv2.flush()
-                found.add(qrcodeData)
+                if qrcodeData not in found:
+                    csv2.write("{},{}\n".format(qrcodeData, datetime.datetime.now()))
+                    csv2.flush()
+                    found.add(qrcodeData)
+            else:
+                print("No Internet found")
+                if qrcodeData not in found:
+                    csv2.write("{},{}\n".format(qrcodeData, datetime.datetime.now()))
+                    csv2.flush()
+                    found.add(qrcodeData)
+
+                break
+
 
         if buttonR.is_pressed:
 
@@ -567,12 +578,13 @@ def qr_capture():
             disp.image(im)
             time.sleep(2)
 #set carousel at newest added nft: display new one here too?
-            opened_file = open('qrcodes.csv')
+            opened_file = open('/boot/qrcodes.csv')
             read_file = reader(opened_file)
             apps_data = list(read_file)
             x = (len(apps_data) - 1)
             print("Saved your punk")
             break
+
 #set condition if no qrcode Data
 #free camera object and exit
     cap.release()
@@ -585,16 +597,17 @@ def scroll_NFT():
     global apps_data
     global x
     if internet():
+        print("Internet accessible")
         print("Your Saved Gan Punks")
         x += 1
         
-        opened_file = open('qrcodes.csv')
+        opened_file = open('/boot/qrcodes.csv')
         read_file = reader(opened_file)
         apps_data = list(read_file)
         if x > (len(apps_data) - 1):
             x = 0
         try:
-            onelink = apps_data[x][1]
+            onelink = apps_data[x][0]
 
         except IndexError:
             print("Empty qrcode data")
@@ -640,39 +653,98 @@ def scroll_NFT():
         except PIL.UnidentifiedImageError:
             print("Bad Link/File")
     else:
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-        im = Image.new("RGB", (240, 240), "red")
-        d = ImageDraw.Draw(im)
+        print("No internet")
+        print("Your Saved Gan Punks")
+        x += 1
+        
+        opened_file = open('/boot/qrcodes.csv')
+        read_file = reader(opened_file)
+        apps_data = list(read_file)
+        if x > (len(apps_data) - 1):
+            x = 0
+        try:
+            onelink = apps_data[x][0]
+
+        except IndexError:
+            print("Empty qrcode data")
+            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+            im = Image.new("RGB", (240, 240), "red")
+            d = ImageDraw.Draw(im)
+            art_checkers_fast(im)
+#            d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+            d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+            d.text((120, 120), "No QRcodes", fill="black", anchor="ms", font=font)
+            d.text((120, 140), "are loaded yet", fill="black", anchor="ms", font=font)
+            d.text((120, 160), "Shutting Down", fill="black", anchor="ms", font=font)
+            d.text((120, 180), "Turn on unit again", fill="black", anchor="ms", font=font)
+            d.text((120, 200), "when you are ready", fill="black", anchor="ms", font=font)
+            d.text((120, 220), "___to_____scan____", fill="black", anchor="ms", font=font)
+            disp.image(im)
+            time.sleep(20)
+            shut_down()
+
+        print(len(apps_data))
+
+####qr code displayer
+        qr = qrcode.QRCode()
+        print(onelink)
+        qr.add_data(onelink)
+        qr.make()
+        imgrender = qr.make_image(fill_color="black", back_color="#FAF9F6")
+        imgrender2 = imgrender.resize((WIDTH, HEIGHT))
+
+#display next NFT in order of CSV
+##        response = requests.get(onelink)
+##        image_bytes = io.BytesIO(response.content)
+
+#check for bad link
+        try:
+##            img = PIL.Image.open(image_bytes)
+##            resized_img = img.resize((WIDTH, HEIGHT))
+##            disp.image(resized_img)
+
+            disp.image(imgrender2)
+
+            time.sleep(0.25)            
+        except PIL.UnidentifiedImageError:
+            print("Bad Link/File")
+
+
+
+##        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+##        im = Image.new("RGB", (240, 240), "red")
+##        d = ImageDraw.Draw(im)
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
-        art_checkers_fast(im)
+##        art_checkers_fast(im)
 #        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
-        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
-        d.text((120, 120), "You are out", fill="black", anchor="ms", font=font)
-        d.text((120, 140), "of wifi range", fill="black", anchor="ms", font=font)
-        d.text((120, 160), "or wifi setup", fill="black", anchor="ms", font=font)
-        d.text((120, 180), "went wrong.", fill="black", anchor="ms", font=font)
-        d.text((120, 200), "Move closer to router", fill="black", anchor="ms", font=font)
-        d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+##        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+##        d.text((120, 120), "You are out", fill="black", anchor="ms", font=font)
+##        d.text((120, 140), "of wifi range", fill="black", anchor="ms", font=font)
+##        d.text((120, 160), "or wifi setup", fill="black", anchor="ms", font=font)
+##        d.text((120, 180), "went wrong.", fill="black", anchor="ms", font=font)
+##        d.text((120, 200), "Move closer to router", fill="black", anchor="ms", font=font)
+##        d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
 
 #        im = im.rotate()
-        disp.image(im)
-        print("no internet available")
+##        disp.image(im)
+##        print("no internet available")
  
 def reverse_scroll_NFT():
     global apps_data
     global x
 #reverse direction scrolling
     if internet():
+        print("Internet working")
         print("Your Saved Gan Punks:reverse direction")
         x -= 1
         if x < 0:
             x = (len(apps_data) - 1) 
-        opened_file = open('qrcodes.csv')
+        opened_file = open('/boot/qrcodes.csv')
         read_file = reader(opened_file)
         apps_data = list(read_file)
         try:
-            onelink = apps_data[x][1]
+            onelink = apps_data[x][0]
 
         except IndexError:
             print("Empty qrcode data")
@@ -724,28 +796,91 @@ def reverse_scroll_NFT():
         except PIL.UnidentifiedImageError:
             print("Bad Link/File")
 
+
     else: 
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-        im = Image.new("RGB", (240, 240), "red")
-        d = ImageDraw.Draw(im)
+        print("No internet")
+        print("Your Saved Gan Punks:reverse direction")
+        x -= 1
+        if x < 0:
+            x = (len(apps_data) - 1) 
+        opened_file = open('/boot/qrcodes.csv')
+        read_file = reader(opened_file)
+        apps_data = list(read_file)
+        try:
+            onelink = apps_data[x][0]
+
+        except IndexError:
+            print("Empty qrcode data")
+            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+            im = Image.new("RGB", (240, 240), "red")
+            d = ImageDraw.Draw(im)
+            art_checkers_fast(im)
+#            d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+            d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+            d.text((120, 120), "No QRcodes", fill="black", anchor="ms", font=font)
+            d.text((120, 140), "are loaded yet", fill="black", anchor="ms", font=font)
+            d.text((120, 160), "Shutting Down", fill="black", anchor="ms", font=font)
+            d.text((120, 180), "Turn on unit again", fill="black", anchor="ms", font=font)
+            d.text((120, 200), "when you are ready", fill="black", anchor="ms", font=font)
+            d.text((120, 220), "___to_____scan____", fill="black", anchor="ms", font=font)
+            disp.image(im)
+            time.sleep(20)
+            shut_down()
+
+        print(len(apps_data))
+
+####qr code displayer
+        qr = qrcode.QRCode()
+        print(onelink)
+        qr.add_data(onelink)
+        qr.make()
+        imgrender = qr.make_image(fill_color="black", back_color="#FAF9F6")
+        imgrender2 = imgrender.resize((WIDTH, HEIGHT))
+#    disp.image(imgrender2)
+
+
+#display next NFT in reverse order of CSV
+##        response = requests.get(onelink)
+        
+##        image_bytes = io.BytesIO(response.content)
+
+
+
+
+#screen for bad link
+        try:
+#            img = PIL.Image.open(image_bytes)
+#            resized_img = img.resize((WIDTH, HEIGHT))
+#            disp.image(resized_img)
+
+            disp.image(imgrender2)
+
+            time.sleep(0.25)            
+        except PIL.UnidentifiedImageError:
+            print("Bad Link/File")
+
+##    else: 
+##        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+##        im = Image.new("RGB", (240, 240), "red")
+##        d = ImageDraw.Draw(im)
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
-        art_checkers_fast(im)
+##        art_checkers_fast(im)
 #        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
-        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
-        d.text((120, 120), "You are out", fill="black", anchor="ms", font=font)
-        d.text((120, 140), "of wifi range", fill="black", anchor="ms", font=font)
-        d.text((120, 160), "or wifi setup", fill="black", anchor="ms", font=font)
-        d.text((120, 180), "went wrong.", fill="black", anchor="ms", font=font)
-        d.text((120, 200), "Move closer to router", fill="black", anchor="ms", font=font)
-        d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+##        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+##        d.text((120, 120), "You are out", fill="black", anchor="ms", font=font)
+##        d.text((120, 140), "of wifi range", fill="black", anchor="ms", font=font)
+##        d.text((120, 160), "or wifi setup", fill="black", anchor="ms", font=font)
+##       d.text((120, 180), "went wrong.", fill="black", anchor="ms", font=font)
+##        d.text((120, 200), "Move closer to router", fill="black", anchor="ms", font=font)
+##        d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
 
 #        im = im.rotate()
-        disp.image(im)
-        print("no internet available")
+##        disp.image(im)
+##        print("no internet available")
    
 def no_NFT():
-    opened_file = open('qrcodes.csv')
+    opened_file = open('/boot/qrcodes.csv')
     read_file = reader(opened_file)
     apps_data = list(read_file)
     if (len(apps_data)) == 0:
@@ -815,7 +950,7 @@ def long_push2():
 
     disp.image(im)
     time.sleep(20)
-    os.remove('qrcodes.csv')
+    os.remove('/boot/qrcodes.csv')
     time.sleep(0.25)
     os.system("sudo reboot now")
 
@@ -955,7 +1090,7 @@ def long_push():
 #             add display x NFT to reset visual accurately
                 if internet():
                     print("reset ordering")
-                    opened_file = open('qrcodes.csv')
+                    opened_file = open('/boot/qrcodes.csv')
                     read_file = reader(opened_file)
                     apps_data = list(read_file)
 
@@ -1065,73 +1200,73 @@ splash_screen()
 
 
 #check internet connection
-if internet() == False:
+##if internet() == False:
 #    response = requests.get(onelink)
 
 #except Exception:
-    print("can't connect to internet:socket gaierror")
+##    print("can't connect to internet:socket gaierror")
 
-    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-    im = Image.new("RGB", (240, 240), "blue")
-    d = ImageDraw.Draw(im)
+##    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+##    im = Image.new("RGB", (240, 240), "blue")
+##    d = ImageDraw.Draw(im)
 #    d.line(((0, 120), (200, 120)), "gray")
 #    d.line(((120, 0), (120, 200)), "gray")
-    art(im)
+##    art(im)
 #    d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
 #    d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
-    d.text((120, 120), "No internet connected", fill="black", anchor="ms", font=font)
-    d.text((120, 140), "to fetch NFT images", fill="black", anchor="ms", font=font)
-    d.text((120, 160), "Connect wifi on your", fill="black", anchor="ms", font=font)
-    d.text((120, 180), "phone to 'HomeBridge'", fill="black", anchor="ms", font=font)
-    d.text((120, 200), "shutting down in 2", fill="black", anchor="ms", font=font)
-    d.text((120, 220), "minutes", fill="black", anchor="ms", font=font)
+##    d.text((120, 120), "No internet connected", fill="black", anchor="ms", font=font)
+##    d.text((120, 140), "to fetch NFT images", fill="black", anchor="ms", font=font)
+##    d.text((120, 160), "Connect wifi on your", fill="black", anchor="ms", font=font)
+##    d.text((120, 180), "phone to 'HomeBridge'", fill="black", anchor="ms", font=font)
+##    d.text((120, 200), "shutting down in 2", fill="black", anchor="ms", font=font)
+##    d.text((120, 220), "minutes", fill="black", anchor="ms", font=font)
 
 #       im = im.rotate()
-    disp.image(im)
-    time.sleep(160)
+##    disp.image(im)
+##    time.sleep(160)
 
-    print("Re-Connect:Auto Shutting Down in 2 minutes")
+##    print("Re-Connect:Auto Shutting Down in 2 minutes")
 
-    if internet() == False:
+##    if internet() == False:
 #        response = requests.get(onelink)
 #    except Exception:
-        print("retry connect internet:can't connect to internet:socket gaierror")
+##        print("retry connect internet:can't connect to internet:socket gaierror")
 
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-        im = Image.new("RGB", (240, 240), "red")
-        d = ImageDraw.Draw(im)
+##        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+##        im = Image.new("RGB", (240, 240), "red")
+##        d = ImageDraw.Draw(im)
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
-        art_checkers(im)
+##        art_checkers(im)
 #        d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
-        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
-        d.text((120, 120), "Retried internet, Still", fill="black", anchor="ms", font=font)
-        d.text((120, 140), "No internet connected", fill="black", anchor="ms", font=font)
-        d.text((120, 160), "Shutting Down", fill="black", anchor="ms", font=font)
-        d.text((120, 180), "now!", fill="black", anchor="ms", font=font)
+##        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+##        d.text((120, 120), "Retried internet, Still", fill="black", anchor="ms", font=font)
+##        d.text((120, 140), "No internet connected", fill="black", anchor="ms", font=font)
+##        d.text((120, 160), "Shutting Down", fill="black", anchor="ms", font=font)
+##        d.text((120, 180), "now!", fill="black", anchor="ms", font=font)
 #        d.text((120, 200), "fasfd", fill="black", anchor="ms", font=font)
 #        d.text((120, 220), "n in 2mins", fill="black", anchor="ms", font=font)
 
 #       im = im.rotate()
-        disp.image(im)
-        time.sleep(30)
+##        disp.image(im)
+##        time.sleep(30)
 
 
         #Shutdown display screen Splash
-        image = Image.open('nftydaze4.jpg')
-        image = image.resize((WIDTH, HEIGHT))
-        print('Drawing image')
-        disp.image(image)
+##        image = Image.open('nftydaze4.jpg')
+##        image = image.resize((WIDTH, HEIGHT))
+##        print('Drawing image')
+##        disp.image(image)
 
-        time.sleep(5)
-        img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
-        draw = ImageDraw.Draw(img)
-        disp.image(img)
-        time.sleep(0.25)
+##        time.sleep(5)
+##        img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
+##        draw = ImageDraw.Draw(img)
+##        disp.image(img)
+##        time.sleep(0.25)
 
-        os.system("sudo shutdown -h now")
-        while 1:
-            time.sleep(1)
+##        os.system("sudo shutdown -h now")
+##        while 1:
+##            time.sleep(1)
 
 #check if user needs onboarding/load NFTs
 #no_NFT()
