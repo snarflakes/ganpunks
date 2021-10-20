@@ -440,60 +440,60 @@ def qr_capture():
 #first go black/stop scanning/process
             if internet():
                 print("Internet found")
-                try:
-                    response = requests.get(qrcodeData)
-                    image_bytes = io.BytesIO(response.content)
-                except requests.exceptions.MissingSchema:
-                    print("Error, requests.exceptions.missingschema") 
+##                try:
+##                    response = requests.get(qrcodeData)
+##                    image_bytes = io.BytesIO(response.content)
+##                except requests.exceptions.MissingSchema:
+##                    print("Error, requests.exceptions.missingschema") 
 
 #check for mp4 image file
-                try:
-                    img = PIL.Image.open(image_bytes)
-                except PIL.UnidentifiedImageError:
-                    print("MPEG scan attempted")
-                    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-                    im = Image.new("RGB", (240, 240), "red")
-                    d = ImageDraw.Draw(im)
+##                try:
+##                    img = PIL.Image.open(image_bytes)
+##                except PIL.UnidentifiedImageError:
+##                    print("MPEG scan attempted")
+##                    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+##                    im = Image.new("RGB", (240, 240), "red")
+##                    d = ImageDraw.Draw(im)
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
-                    art_checkers_fast(im)
+##                    art_checkers_fast(im)
 #                d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
-                    d.text((120, 100), "DON'T do that", fill="black", anchor="ms", font=font)
-                    d.text((120, 120), "NO MPEGS/VIDEOS", fill="black", anchor="ms", font=font)
-                    d.text((120, 140), "on this model", fill="black", anchor="ms", font=font)
-                    d.text((120, 160), "Press Exit Scanning", fill="black", anchor="ms", font=font)
-                    d.text((120, 180), "Direction and", fill="black", anchor="ms", font=font)
-                    d.text((120, 200), "Start over again", fill="black", anchor="ms", font=font)
-                    d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+##                    d.text((120, 100), "DON'T do that", fill="black", anchor="ms", font=font)
+##                    d.text((120, 120), "NO MPEGS/VIDEOS", fill="black", anchor="ms", font=font)
+##                    d.text((120, 140), "on this model", fill="black", anchor="ms", font=font)
+##                    d.text((120, 160), "Press Exit Scanning", fill="black", anchor="ms", font=font)
+##                    d.text((120, 180), "Direction and", fill="black", anchor="ms", font=font)
+##                    d.text((120, 200), "Start over again", fill="black", anchor="ms", font=font)
+##                    d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
 #        im = im.rotate()
-                    disp.image(im)
-                    time.sleep(2)
-                    break
+##                    disp.image(im)
+##                    time.sleep(2)
+##                    break
 
 #check size of image 
-                imageload = sys.getsizeof(img.tobytes())
-                print("img size in memory in bytes: ", imageload)
-                if imageload >36000000:
-                    print("close but too big")
-                    time.sleep(1)
-                    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-                    im = Image.new("RGB", (240, 240), "red")
-                    d = ImageDraw.Draw(im)
+##                imageload = sys.getsizeof(img.tobytes())
+##                print("img size in memory in bytes: ", imageload)
+##                if imageload >36000000:
+##                    print("close but too big")
+##                    time.sleep(1)
+##                    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+##                    im = Image.new("RGB", (240, 240), "red")
+##                    d = ImageDraw.Draw(im)
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
-                    art_checkers_fast(im)
+##                    art_checkers_fast(im)
 #                d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
-                    d.text((120, 100), "DON'T do that", fill="black", anchor="ms", font=font)
-                    d.text((120, 120), "again", fill="black", anchor="ms", font=font)
-                    d.text((120, 140), "that NFT image file is", fill="black", anchor="ms", font=font)
-                    d.text((120, 160), "wayyy too big", fill="black", anchor="ms", font=font)
-                    d.text((120, 180), "Press Exit Scanning", fill="black", anchor="ms", font=font)
-                    d.text((120, 200), "And start over!", fill="black", anchor="ms", font=font)
-                    d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+##                    d.text((120, 100), "DON'T do that", fill="black", anchor="ms", font=font)
+##                    d.text((120, 120), "again", fill="black", anchor="ms", font=font)
+##                    d.text((120, 140), "that NFT image file is", fill="black", anchor="ms", font=font)
+##                    d.text((120, 160), "wayyy too big", fill="black", anchor="ms", font=font)
+##                    d.text((120, 180), "Press Exit Scanning", fill="black", anchor="ms", font=font)
+##                    d.text((120, 200), "And start over!", fill="black", anchor="ms", font=font)
+##                    d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
 #        im = im.rotate()
-                    disp.image(im)
-                    time.sleep(2)
-                    break
+##                    disp.image(im)
+##                    time.sleep(2)
+##                    break
 #                if imageload >36000000:
 #                    raise stopIteration
 
@@ -501,42 +501,42 @@ def qr_capture():
 #                print("close but too big")
 #                break
             
-                resized_img = img.resize((WIDTH, HEIGHT))
-                try:
-                    disp.image(resized_img)
-                except ValueError:
-                    print(resized_img.mode)
-                    resized_img = resized_img.convert('RGB')
-                    disp.image(resized_img)
-                    time.sleep(2)
-                    print("GIF scan attempted")
-                    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-                    im = Image.new("RGB", (240, 240), "red")
-                    d = ImageDraw.Draw(im)
+##                resized_img = img.resize((WIDTH, HEIGHT))
+##                try:
+##                    disp.image(resized_img)
+##                except ValueError:
+##                    print(resized_img.mode)
+##                    resized_img = resized_img.convert('RGB')
+##                    disp.image(resized_img)
+##                    time.sleep(2)
+##                    print("GIF scan attempted")
+##                    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+##                    im = Image.new("RGB", (240, 240), "red")
+##                    d = ImageDraw.Draw(im)
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
-                    art_checkers_fast(im)
+##                    art_checkers_fast(im)
 #                d.text((120, 80), "___(°)~(°)_________", fill="black", anchor="ms", font=font)
-                    d.text((120, 100), "DON'T do that", fill="black", anchor="ms", font=font)
-                    d.text((120, 120), "No GIFS, or it's", fill="black", anchor="ms", font=font)
-                    d.text((120, 140), "a file extension", fill="black", anchor="ms", font=font)
-                    d.text((120, 160), "issue. Press Exit", fill="black", anchor="ms", font=font)
-                    d.text((120, 180), "Scanning Direction", fill="black", anchor="ms", font=font)
-                    d.text((120, 200), "And Start over again", fill="black", anchor="ms", font=font)
-                    d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+##                    d.text((120, 100), "DON'T do that", fill="black", anchor="ms", font=font)
+##                    d.text((120, 120), "No GIFS, or it's", fill="black", anchor="ms", font=font)
+##                    d.text((120, 140), "a file extension", fill="black", anchor="ms", font=font)
+##                    d.text((120, 160), "issue. Press Exit", fill="black", anchor="ms", font=font)
+##                    d.text((120, 180), "Scanning Direction", fill="black", anchor="ms", font=font)
+##                    d.text((120, 200), "And Start over again", fill="black", anchor="ms", font=font)
+##                    d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
 #        im = im.rotate()
-                    disp.image(im)
-                    time.sleep(2)
-                    break
-                time.sleep(0.50)
+##                    disp.image(im)
+##                    time.sleep(2)
+##                    break
+##                time.sleep(0.50)
 #Go black
-                print("QRCode scanned to Display Screen")
+##                print("QRCode scanned to Display Screen")
 #	clear screen to black ********Add Saved in Ascii? "press joystick down to stop scanning QRcodes?"
 #                disp.begin()
-                img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
-                draw = ImageDraw.Draw(img)
-                disp.image(img)
-                time.sleep(0.25)
+##                img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
+##                draw = ImageDraw.Draw(img)
+##                disp.image(img)
+##                time.sleep(0.25)
 ## Add except if trying to scan  marketplace, not pure image data 
 ## clean or better interpret , and : characters in web links
 ## Add except if no qrcode was scanned
@@ -547,6 +547,9 @@ def qr_capture():
                     csv2.write("{},{}\n".format(qrcodeData, datetime.datetime.now()))
                     csv2.flush()
                     found.add(qrcodeData)
+
+
+
             else:
                 print("No Internet found")
                 if qrcodeData not in found:
@@ -554,7 +557,7 @@ def qr_capture():
                     csv2.flush()
                     found.add(qrcodeData)
 
-                break
+#                break
 
 
         if buttonR.is_pressed:
