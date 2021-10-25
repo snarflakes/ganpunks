@@ -200,21 +200,21 @@ def art_checkers(im):
 #(200,100) nice more central point
 
     draw.polygon(((210,80), (0,30), (30,30)), fill=(0,0,0), outline=(255,255,255))
-    disp.image(im)
+#    disp.image(im)
     draw.polygon(((210,80), (30,30), (60,30)), fill=(255,255,255), outline=(255,255,255))
-    disp.image(im)
+#    disp.image(im)
     draw.polygon(((210,80), (60,30), (90,30)), fill=(0,0,0), outline=(255,255,255))
-    disp.image(im)
+#    disp.image(im)
     draw.polygon(((210,80), (90,30), (120,30)), fill=(255,255,255), outline=(255,255,255))
-    disp.image(im)
+#    disp.image(im)
     draw.polygon(((210,80), (120,30), (150,30)), fill=(0,0,0), outline=(255,255,255))
-    disp.image(im)
+#    disp.image(im)
     draw.polygon(((210,80), (150,30), (180,30)), fill=(255,255,255), outline=(255,255,255))
-    disp.image(im)
+#    disp.image(im)
     draw.polygon(((210,80), (180,30), (210,30)), fill=(0,0,0), outline=(255,255,255))
-    disp.image(im)
+#    disp.image(im)
     draw.polygon(((210,80), (210,30), (240,30)), fill=(255,255,255), outline=(255,255,255))
-    disp.image(im)
+#    disp.image(im)
     return im,d
 
 def art_checkers_fast(im):
@@ -342,10 +342,10 @@ def delete_NFT():
         read_file = reader(f)
         mylist = list(read_file)
         print(removenft)
-        onelink = mylist[removenft][1]
+        onelink = mylist[removenft][0]
         print(onelink)
         for row in mylist: #for every row in the file
-            if row[1]!=onelink: #as long as the username is not in the row .......
+            if row[0]!=onelink: #as long as the username is not in the row .......
                 updatedlist.append(row) #add each row, line by line, into a list called 'udpatedlist'
         print(updatedlist)
 #            print(updatedlist[0][1])
@@ -374,7 +374,7 @@ def delete_NFT():
 
 #        im = im.rotate()
         disp.image(im)
-        time.sleep(2)
+#        time.sleep(2)
     if x == 0:
         print("1st nft deleted; restart list")
         x = (len(apps_data) - 1) 
@@ -640,6 +640,11 @@ def scroll_NFT():
         imgrender = qr.make_image(fill_color="black", back_color="#FAF9F6")
         imgrender2 = imgrender.resize((WIDTH, HEIGHT))
 
+        if x == 0:
+            d = ImageDraw.Draw(imgrender2)
+            d.text((120,230),'1',(200,15,20))
+
+
 #display next NFT in order of CSV
 ##        response = requests.get(onelink)
 ##        image_bytes = io.BytesIO(response.content)
@@ -695,7 +700,12 @@ def scroll_NFT():
         qr.make()
         imgrender = qr.make_image(fill_color="black", back_color="#FAF9F6")
         imgrender2 = imgrender.resize((WIDTH, HEIGHT))
-
+ 
+        if x == 0:
+            d = ImageDraw.Draw(imgrender2)
+            d.text((120,230),'1',(200,15,20))
+            
+ 
 #display next NFT in order of CSV
 ##        response = requests.get(onelink)
 ##        image_bytes = io.BytesIO(response.content)
@@ -778,6 +788,10 @@ def reverse_scroll_NFT():
         imgrender2 = imgrender.resize((WIDTH, HEIGHT))
 #    disp.image(imgrender2)
 
+        if x == 0:
+            d = ImageDraw.Draw(imgrender2)
+            d.text((120,230),'1',(200,15,20))
+
 
 #display next NFT in reverse order of CSV
 ##        response = requests.get(onelink)
@@ -840,6 +854,10 @@ def reverse_scroll_NFT():
         imgrender = qr.make_image(fill_color="black", back_color="#FAF9F6")
         imgrender2 = imgrender.resize((WIDTH, HEIGHT))
 #    disp.image(imgrender2)
+
+        if x == 0:
+            d = ImageDraw.Draw(imgrender2)
+            d.text((120,230),'1',(200,15,20))
 
 
 #display next NFT in reverse order of CSV
