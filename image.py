@@ -1094,7 +1094,8 @@ def long_push():
 ##            disp.image(resized_img)
 
                     disp.image(imgrender2)
-                    time.sleep(0.25)            
+#                    time.sleep(0.25)            
+                    time.sleep(delay)   
                 except PIL.UnidentifiedImageError:
                     print("Bad Link/File")
 
@@ -1168,8 +1169,8 @@ def long_push():
 ##            disp.image(resized_img)
 
                     disp.image(imgrender2)
-
-                    time.sleep(0.25)            
+                    time.sleep(delay)
+#                    time.sleep(0.25)            
                 except PIL.UnidentifiedImageError:
                     print("Bad Link/File")
 
