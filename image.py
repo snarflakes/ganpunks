@@ -948,7 +948,7 @@ def push_button2():
     if diff < hold_time :
         delete_NFT()
     else:
-        long_push2()
+        long_push()
 
 def long_push2():
     print("Reset NFT storage")
@@ -1032,6 +1032,11 @@ def long_push():
         start_time = time.time()
         breakoutflag = False
         for _ in range(100000):
+
+            opened_file = open('/boot/qrcodes.csv')
+            read_file = reader(opened_file)
+            apps_data = list(read_file)
+
             for value in apps_data:
 #            t1.start()
 #            t2.start()
@@ -1059,118 +1064,379 @@ def long_push():
                     disp.image(im)
                     time.sleep(2)
                     break 
-                print(value[1])
-                onelink = value[1]
-                if internet():
-                    try:
-                        response = requests.get(onelink)
-                        image_bytes = io.BytesIO(response.content)
-#scan for corrupted link
-                        img = PIL.Image.open(image_bytes)
-                        resized_img = img.resize((WIDTH, HEIGHT))
-                        disp.image(resized_img)
-                        time.sleep(delay)            
-                    except PIL.UnidentifiedImageError:
-                        print("Bad Link/File")
-                    except http.client.RemoteDisconnected:
-                        print("http:client.RemoteDisconnected")
-                    except urllib3.exceptions.ProtocolError:
-                        print("urllib3.exceptions")
-                    except requests.exceptions.ConnectionError:
-                        print("requests.exceptions")
-                    except socket.gaierror:
-                        print("socket.gaierror")
-                    except urllib3.exceptions.NewConnectionError:
-                        print("urllib new connection error")
-                    except urllib3.exceptions.MaxRetryError:
-                        print("urlib max retryerror")
-                    except NameError:
-                        print("name error")
+                print(value[0])
+                onelink = value[0]
 
-                else: 
+
+####qr code displayer
+                qr = qrcode.QRCode()
+                print(onelink)
+                qr.add_data(onelink)
+                qr.make()
+                imgrender = qr.make_image(fill_color="black", back_color="#FAF9F6")
+                imgrender2 = imgrender.resize((WIDTH, HEIGHT))
+
+
+# add 0 to qrcode 1
+ #               if x == 0:
+ #                   d = ImageDraw.Draw(imgrender2)
+ #                   d.text((120,230),'1',(200,15,20))
+
+
+#display next NFT in order of CSV
+##        response = requests.get(onelink)
+##        image_bytes = io.BytesIO(response.content)
+
+#check for bad link
+                try:
+##            img = PIL.Image.open(image_bytes)
+##            resized_img = img.resize((WIDTH, HEIGHT))
+##            disp.image(resized_img)
+
+                    disp.image(imgrender2)
+                    time.sleep(0.25)            
+                except PIL.UnidentifiedImageError:
+                    print("Bad Link/File")
+
+##############old slideshow  display
+
+#                response = requests.get(onelink)
+#                image_bytes = io.BytesIO(response.content)
+#scan for corrupted link
+#               img = PIL.Image.open(image_bytes)
+#                resized_img = img.resize((WIDTH, HEIGHT))
+#                disp.image(resized_img)
+#                time.sleep(delay)            
+##############old slidshow display above
+
+           
+            time.sleep(0.25)
+            if breakoutflag:
+#             add display x NFT to reset visual accurately
+#                if internet():
+                print("reset ordering")
+
+                opened_file = open('/boot/qrcodes.csv')
+                read_file = reader(opened_file)
+                apps_data = list(read_file)
+ #               if x > (len(apps_data) - 1):
+ #                   x = 0
+                try:
+                    onelink = apps_data[x][0]
+
+                except IndexError:
+                    print("Empty qrcode data")
                     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
                     im = Image.new("RGB", (240, 240), "red")
+                    d = ImageDraw.Draw(im)
+                    art_checkers_fast(im)
+#            d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+                    d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+                    d.text((120, 120), "No QRcodes", fill="black", anchor="ms", font=font)
+                    d.text((120, 140), "are loaded yet", fill="black", anchor="ms", font=font)
+                    d.text((120, 160), "Shutting Down", fill="black", anchor="ms", font=font)
+                    d.text((120, 180), "Turn on unit again", fill="black", anchor="ms", font=font)
+                    d.text((120, 200), "when you are ready", fill="black", anchor="ms", font=font)
+                    d.text((120, 220), "___to_____scan____", fill="black", anchor="ms", font=font)
+                    disp.image(im)
+                    time.sleep(20)
+                    shut_down()
+
+                print(len(apps_data))
+
+####qr code displayer
+                qr = qrcode.QRCode()
+                print(onelink)
+                qr.add_data(onelink)
+                qr.make()
+                imgrender = qr.make_image(fill_color="black", back_color="#FAF9F6")
+                imgrender2 = imgrender.resize((WIDTH, HEIGHT))
+
+#                if x == 0:
+#                    d = ImageDraw.Draw(imgrender2)
+#                    d.text((120,230),'1',(200,15,20))
+
+
+#display next NFT in order of CSV
+##        response = requests.get(onelink)
+##        image_bytes = io.BytesIO(response.content)
+
+#check for bad link
+                try:
+##            img = PIL.Image.open(image_bytes)
+##            resized_img = img.resize((WIDTH, HEIGHT))
+##            disp.image(resized_img)
+
+                    disp.image(imgrender2)
+
+                    time.sleep(0.25)            
+                except PIL.UnidentifiedImageError:
+                    print("Bad Link/File")
+
+
+
+
+#                opened_file = open('/boot/qrcodes.csv')
+#                read_file = reader(opened_file)
+#                apps_data = list(read_file)
+
+#                try:
+#                    onelink = apps_data[x][1]
+
+#                except IndexError:
+#                    print("Empty qrcode data")
+#                    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+#                    im = Image.new("RGB", (240, 240), "red")
+#                    d = ImageDraw.Draw(im)
+#                    art_checkers_fast(im)
+#            d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+#                    d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+#                    d.text((120, 120), "No QRcodes", fill="black", anchor="ms", font=font)
+#                    d.text((120, 140), "are loaded yet", fill="black", anchor="ms", font=font)
+#                    d.text((120, 160), "Shutting Down", fill="black", anchor="ms", font=font)
+#                    d.text((120, 180), "Turn on unit again", fill="black", anchor="ms", font=font)
+ #                   d.text((120, 200), "when you are ready", fill="black", anchor="ms", font=font)
+#                    d.text((120, 220), "___to_____scan____", fill="black", anchor="ms", font=font)
+#                    disp.image(im)
+#                    time.sleep(20)
+#                    shut_down()
+
+#                print(len(apps_data))
+#                response = requests.get(onelink)
+#                image_bytes = io.BytesIO(response.content)
+#screen for bad link
+#                try:
+#                    img = PIL.Image.open(image_bytes)
+#                    resized_img = img.resize((WIDTH, HEIGHT))
+#                    disp.image(resized_img)
+#                    time.sleep(0.25)            
+#                except PIL.UnidentifiedImageError:
+#                    print("Bad Link/File")
+
+
+                break
+        time.sleep(0.25)
+
+
+
+
+
+
+    else:
+        print("no internet available")
+                
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 30)
+        im = Image.new("RGB", (240, 240), "pink")
+        d = ImageDraw.Draw(im)
+
+#        d.line(((0, 120), (200, 120)), "gray")
+#        d.line(((120, 0), (120, 200)), "gray")
+        art_checkers(im)
+#        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+#        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+        d.text((120, 120), "SlideShow", fill="black", anchor="ms", font=font)
+        d.text((120, 140), "Mode", fill="black", anchor="ms", font=font)
+        d.text((120, 160), "Activated", fill="black", anchor="ms", font=font)
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 10)
+        d.text((120, 180), "Lasting: " + str(seconds) + " seconds", fill="black", anchor="ms", font=font)
+
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 20)
+        d.text((120, 200), "Hold Power button", fill="black", anchor="ms", font=font)
+        d.text((120, 220), "to stop early", fill="black", anchor="ms", font=font)
+
+#        im = im.rotate()
+        disp.image(im)
+        time.sleep(4)
+
+        start_time = time.time()
+        breakoutflag = False
+        for _ in range(100000):
+
+            opened_file = open('/boot/qrcodes.csv')
+            read_file = reader(opened_file)
+            apps_data = list(read_file)
+
+            for value in apps_data:
+#            t1.start()
+#            t2.start()
+                current_time = time.time()
+                elapsed_time = current_time - start_time
+                print(breakoutflag)
+                if button1.is_pressed:
+                    breakoutflag = True 
+
+                if elapsed_time > seconds:
+                    print("Finished iterating in : " + str(int(elapsed_time)) + " seconds")
+                    breakoutflag = True
+                    break
+                elif breakoutflag == True:
+                    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 22)
+                    im = Image.new("RGB", (240, 240), "aqua")
                     d = ImageDraw.Draw(im)
 #        d.line(((0, 120), (200, 120)), "gray")
 #        d.line(((120, 0), (120, 200)), "gray")
                     art_checkers_fast(im)
 #                    d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
-                    d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
-                    d.text((120, 120), "You are out", fill="black", anchor="ms", font=font)
-                    d.text((120, 140), "of wifi range", fill="black", anchor="ms", font=font)
-                    d.text((120, 160), "or wifi setup", fill="black", anchor="ms", font=font)
-                    d.text((120, 180), "went wrong.", fill="black", anchor="ms", font=font)
-                    d.text((120, 200), "Move closer to router", fill="black", anchor="ms", font=font)
-                    d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
-#        im = im.rotate()
+                    d.text((120, 120), "Stopping Slideshow ", fill="black", anchor="ms", font=font)
+                    d.text((120, 140), "Early", fill="black", anchor="ms", font=font)
+#                    d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
                     disp.image(im)
-                    print("no internet available")
-            
+                    time.sleep(2)
+                    break 
+                print(value[0])
+                onelink = value[0]
+
+
+####qr code displayer
+                qr = qrcode.QRCode()
+                print(onelink)
+                qr.add_data(onelink)
+                qr.make()
+                imgrender = qr.make_image(fill_color="black", back_color="#FAF9F6")
+                imgrender2 = imgrender.resize((WIDTH, HEIGHT))
+
+
+# add 0 to qrcode 1
+ #               if x == 0:
+ #                   d = ImageDraw.Draw(imgrender2)
+ #                   d.text((120,230),'1',(200,15,20))
+
+
+#display next NFT in order of CSV
+##        response = requests.get(onelink)
+##        image_bytes = io.BytesIO(response.content)
+
+#check for bad link
+                try:
+##            img = PIL.Image.open(image_bytes)
+##            resized_img = img.resize((WIDTH, HEIGHT))
+##            disp.image(resized_img)
+
+                    disp.image(imgrender2)
+                    time.sleep(0.25)            
+                except PIL.UnidentifiedImageError:
+                    print("Bad Link/File")
+
+##############old slideshow  display
+
+#                response = requests.get(onelink)
+#                image_bytes = io.BytesIO(response.content)
+#scan for corrupted link
+#               img = PIL.Image.open(image_bytes)
+#                resized_img = img.resize((WIDTH, HEIGHT))
+#                disp.image(resized_img)
+#                time.sleep(delay)            
+##############old slidshow display above
+
+           
             time.sleep(0.25)
             if breakoutflag:
 #             add display x NFT to reset visual accurately
-                if internet():
-                    print("reset ordering")
-                    opened_file = open('/boot/qrcodes.csv')
-                    read_file = reader(opened_file)
-                    apps_data = list(read_file)
+#                if internet():
+                print("reset ordering")
 
-                    try:
-                        onelink = apps_data[x][1]
+                opened_file = open('/boot/qrcodes.csv')
+                read_file = reader(opened_file)
+                apps_data = list(read_file)
+ #               if x > (len(apps_data) - 1):
+ #                   x = 0
+                try:
+                    onelink = apps_data[x][0]
 
-                    except IndexError:
-                        print("Empty qrcode data")
-                        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-                        im = Image.new("RGB", (240, 240), "red")
-                        d = ImageDraw.Draw(im)
-                        art_checkers_fast(im)
-#            d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
-                        d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
-                        d.text((120, 120), "No QRcodes", fill="black", anchor="ms", font=font)
-                        d.text((120, 140), "are loaded yet", fill="black", anchor="ms", font=font)
-                        d.text((120, 160), "Shutting Down", fill="black", anchor="ms", font=font)
-                        d.text((120, 180), "Turn on unit again", fill="black", anchor="ms", font=font)
-                        d.text((120, 200), "when you are ready", fill="black", anchor="ms", font=font)
-                        d.text((120, 220), "___to_____scan____", fill="black", anchor="ms", font=font)
-                        disp.image(im)
-                        time.sleep(20)
-                        shut_down()
-
-                    print(len(apps_data))
-                    response = requests.get(onelink)
-                    image_bytes = io.BytesIO(response.content)
-#screen for bad link
-                    try:
-                        img = PIL.Image.open(image_bytes)
-                        resized_img = img.resize((WIDTH, HEIGHT))
-                        disp.image(resized_img)
-                        time.sleep(0.25)            
-                    except PIL.UnidentifiedImageError:
-                        print("Bad Link/File")
-
-                else: 
+                except IndexError:
+                    print("Empty qrcode data")
                     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
                     im = Image.new("RGB", (240, 240), "red")
                     d = ImageDraw.Draw(im)
-#        d.line(((0, 120), (200, 120)), "gray")
-#        d.line(((120, 0), (120, 200)), "gray")
                     art_checkers_fast(im)
-#        d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+#            d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
                     d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
-                    d.text((120, 120), "You are out", fill="black", anchor="ms", font=font)
-                    d.text((120, 140), "of wifi range", fill="black", anchor="ms", font=font)
-                    d.text((120, 160), "or wifi setup", fill="black", anchor="ms", font=font)
-                    d.text((120, 180), "went wrong.", fill="black", anchor="ms", font=font)
-                    d.text((120, 200), "Move closer to router", fill="black", anchor="ms", font=font)
-                    d.text((120, 220), "__________________", fill="black", anchor="ms", font=font)
+                    d.text((120, 120), "No QRcodes", fill="black", anchor="ms", font=font)
+                    d.text((120, 140), "are loaded yet", fill="black", anchor="ms", font=font)
+                    d.text((120, 160), "Shutting Down", fill="black", anchor="ms", font=font)
+                    d.text((120, 180), "Turn on unit again", fill="black", anchor="ms", font=font)
+                    d.text((120, 200), "when you are ready", fill="black", anchor="ms", font=font)
+                    d.text((120, 220), "___to_____scan____", fill="black", anchor="ms", font=font)
                     disp.image(im)
-                    print("no internet available")
+                    time.sleep(20)
+                    shut_down()
+
+                print(len(apps_data))
+
+####qr code displayer
+                qr = qrcode.QRCode()
+                print(onelink)
+                qr.add_data(onelink)
+                qr.make()
+                imgrender = qr.make_image(fill_color="black", back_color="#FAF9F6")
+                imgrender2 = imgrender.resize((WIDTH, HEIGHT))
+
+#                if x == 0:
+#                    d = ImageDraw.Draw(imgrender2)
+#                    d.text((120,230),'1',(200,15,20))
+
+
+#display next NFT in order of CSV
+##        response = requests.get(onelink)
+##        image_bytes = io.BytesIO(response.content)
+
+#check for bad link
+                try:
+##            img = PIL.Image.open(image_bytes)
+##            resized_img = img.resize((WIDTH, HEIGHT))
+##            disp.image(resized_img)
+
+                    disp.image(imgrender2)
+
+                    time.sleep(0.25)            
+                except PIL.UnidentifiedImageError:
+                    print("Bad Link/File")
+
+
+
+
+#                opened_file = open('/boot/qrcodes.csv')
+#                read_file = reader(opened_file)
+#                apps_data = list(read_file)
+
+#                try:
+#                    onelink = apps_data[x][1]
+
+#                except IndexError:
+#                    print("Empty qrcode data")
+#                    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+#                    im = Image.new("RGB", (240, 240), "red")
+#                    d = ImageDraw.Draw(im)
+#                    art_checkers_fast(im)
+#            d.text((120, 80), "   (°)~(°)_________", fill="black", anchor="ms", font=font)
+#                    d.text((120, 100), "User:    ", fill="black", anchor="rs", font=font)
+#                    d.text((120, 120), "No QRcodes", fill="black", anchor="ms", font=font)
+#                    d.text((120, 140), "are loaded yet", fill="black", anchor="ms", font=font)
+#                    d.text((120, 160), "Shutting Down", fill="black", anchor="ms", font=font)
+#                    d.text((120, 180), "Turn on unit again", fill="black", anchor="ms", font=font)
+ #                   d.text((120, 200), "when you are ready", fill="black", anchor="ms", font=font)
+#                    d.text((120, 220), "___to_____scan____", fill="black", anchor="ms", font=font)
+#                    disp.image(im)
+#                    time.sleep(20)
+#                    shut_down()
+
+#                print(len(apps_data))
+#                response = requests.get(onelink)
+#                image_bytes = io.BytesIO(response.content)
+#screen for bad link
+#                try:
+#                    img = PIL.Image.open(image_bytes)
+#                    resized_img = img.resize((WIDTH, HEIGHT))
+#                    disp.image(resized_img)
+#                    time.sleep(0.25)            
+#                except PIL.UnidentifiedImageError:
+#                    print("Bad Link/File")
+
 
                 break
         time.sleep(0.25)
 
-    else:
-        print("no internet available")
+
 
 def flip_screen():
     example_d[0], example_d[1] = example_d[1], example_d[0]
