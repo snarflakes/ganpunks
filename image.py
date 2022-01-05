@@ -644,6 +644,10 @@ def scroll_NFT():
             d = ImageDraw.Draw(imgrender2)
             d.text((120,230),'1',(200,15,20))
 
+        if x == (len(apps_data) - 1):
+            print(x)
+            d = ImageDraw.Draw(imgrender2)
+            d.text((120,230),str(x+1),(200,15,20))
 
 #display next NFT in order of CSV
 ##        response = requests.get(onelink)
@@ -704,8 +708,12 @@ def scroll_NFT():
         if x == 0:
             d = ImageDraw.Draw(imgrender2)
             d.text((120,230),'1',(200,15,20))
-            
- 
+
+        if x == (len(apps_data) - 1):
+            print(x)
+            d = ImageDraw.Draw(imgrender2)
+            d.text((120,230),str(x+1),(200,15,20))
+
 #display next NFT in order of CSV
 ##        response = requests.get(onelink)
 ##        image_bytes = io.BytesIO(response.content)
@@ -792,6 +800,11 @@ def reverse_scroll_NFT():
             d = ImageDraw.Draw(imgrender2)
             d.text((120,230),'1',(200,15,20))
 
+        if x == (len(apps_data) - 1):
+            print(x)
+            d = ImageDraw.Draw(imgrender2)
+            d.text((120,230),str(x+1),(200,15,20))
+
 
 #display next NFT in reverse order of CSV
 ##        response = requests.get(onelink)
@@ -859,6 +872,10 @@ def reverse_scroll_NFT():
             d = ImageDraw.Draw(imgrender2)
             d.text((120,230),'1',(200,15,20))
 
+        if x == (len(apps_data) - 1):
+            print(x)
+            d = ImageDraw.Draw(imgrender2)
+            d.text((120,230),str(x+1),(200,15,20))
 
 #display next NFT in reverse order of CSV
 ##        response = requests.get(onelink)
