@@ -128,12 +128,12 @@ apps_data = list(read_file)
 
 def splash_screen():
     print("drawing splash screen")
-    picture_1 = Image.open("nftydaze4.jpg")
+    picture_1 = Image.open("NFTdispenser.jpg")
     image = picture_1.resize((WIDTH, HEIGHT))
     disp.image(image)
 
     WIDTH_dot = range(WIDTH)
-    HEIGHT_dot = range(1,65)
+    HEIGHT_dot = range(5,85)
 
     for y in (HEIGHT_dot[1::4]) :
         disp.image(image)
@@ -144,7 +144,7 @@ def splash_screen():
             b = randint(0,255)
             image.putpixel((x,y), (r, g, b))
 
-    picture_1 = Image.open("nftydaze4.jpg")
+    picture_1 = Image.open("NFTdispenser.jpg")
     image = picture_1.resize((WIDTH, HEIGHT))
 
     disp.image(image)
@@ -158,7 +158,7 @@ def splash_screen():
 
     disp.image(image)
 
-    picture_1 = Image.open("nftydaze4.jpg")
+    picture_1 = Image.open("NFTdispenser.jpg")
     image = picture_1.resize((WIDTH, HEIGHT))
     disp.image(image)
 
@@ -930,13 +930,13 @@ def no_NFT():
 #            d.line(((0, 120), (200, 120)), "gray")
 #            d.line(((120, 0), (120, 200)), "gray")
             art(im) 
-            d.text((120, 100), "Hi. Own'm and Show'm.", fill="black", anchor="ms", font=font)
-            d.text((120, 120), "Find an NFT on opensea.io", fill="black", anchor="ms", font=font)
-            d.text((120, 140), "Images! no GIFS/Videos.", fill="black", anchor="ms", font=font)
+            d.text((120, 100), "<NFT Dispenser>", fill="black", anchor="ms", font=font)
+            d.text((120, 120), "Pick a webLink/website", fill="black", anchor="ms", font=font)
+            d.text((120, 140), "Convert it into a QRCode!", fill="black", anchor="ms", font=font)
             d.text((120, 160), "QRcodeScan starts in 30s", fill="black", anchor="ms", font=font)
 #            d.text((120, 180), "Once NFT stops flashing", fill="black", anchor="ms", font=font)
             d.text((120, 200), "Unit shuts down if", fill="black", anchor="ms", font=font)
-            d.text((120, 220), "no internet or no NFTs", fill="black", anchor="ms", font=font)
+            d.text((120, 220), "no Weblinks loaded", fill="black", anchor="ms", font=font)
 #            d.text((120, 240), "QRcode, unit shuts down", fill="black", anchor="ms", font=font)
 
 #       im = im.rotate()
@@ -1574,7 +1574,7 @@ splash_screen()
 ##            time.sleep(1)
 
 #check if user needs onboarding/load NFTs
-#no_NFT()
+no_NFT()
 
 # Added default most recently added NFT as base NFT displayed (can increase splash screen time): rest of onboarding below functions
 x = (len(apps_data) - 1)
